@@ -242,7 +242,8 @@ export const FAQS = [
         longer be a mentor, and then work with them to help them request a new
         mentor. Once they have been contacted by a new mentor, please set up a
         time to meet the new mentor and bring them up-to-speed on your mentee's
-        progress and needs.
+        progress and needs. Please also email {" "}
+        <a href="mailto: yeji@coved.org">yeji@coved.org</a> so that we can send you the appropriate exit survey.
       </div>
     ),
   },
@@ -274,6 +275,19 @@ export const FAQS = [
     question: "Is CovEducation a 501(c)(3) nonprofit?",
     answer: <div> Yes! </div>,
   },
+  {
+    key: "20",
+    category: "mentor",
+    question: "How do I document my hours?",
+    answer: <div> Please complete {" "}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://docs.google.com/forms/d/e/1FAIpQLSdVzlKYPmLgKT6BFjyKRmnnxzME4Gsz2RFDT0ewMhMFplpToQ/viewform"
+      >
+        this debrief form
+      </a>  after every mentoring session and volunteer activity. </div>
+  }
 ];
 export const timeZones = [
   {
