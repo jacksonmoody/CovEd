@@ -1,11 +1,8 @@
-name: Preview Github Pages
+name: Deploy with Environment Variables
 
 on:
   push:
     branches: [ main ]
-
-  repository_dispatch:
-    types: [ contentful.publish ]
 
 jobs:
   build-preview:
@@ -29,10 +26,8 @@ jobs:
         cache: npm
 
     - name: Install Dependencies & Build Website
-      #env:
-        # CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
-        # CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
-        # PATH_PREFIX: /coved-static/
+      env:
+        CONTENTFUL_ACCESS_TOKEN: ${{ secrets.API }}
       run: |
         npm ci
         npm run build
