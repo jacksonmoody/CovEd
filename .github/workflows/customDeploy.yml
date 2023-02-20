@@ -27,7 +27,7 @@ jobs:
 
     - name: Install Dependencies & Build Website
       env:
-        CONTENTFUL_ACCESS_TOKEN: ${{ secrets.API }}
+        API: ${{ secrets.API }}
       run: |
         npm ci
         npm run build
