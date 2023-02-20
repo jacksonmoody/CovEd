@@ -51,13 +51,15 @@ const Title = styled.h1`
 const Donate = () => {
   return (
     <Layout>
-    <Title> Donate </Title>
-    <p>
-    We are a nonprofit that offers free tutoring, so if you want to help us out with our operations, please donate!
-    </p>
-      <LinkStyled to="https://www.paypal.com/donate/?hosted_button_id=JL9NRMP4AU546" ver="default">
-        PayPal
-      </LinkStyled>
+      <div style={{ display: "flex", maxWidth: "90%", alignContent: "center", justifyContent: "center", justifySelf: "center", justifyItems: "center", flexDirection: "column", margin: "auto", marginTop: "25px", marginBottom: "50px" }}>
+        <Title> Donate </Title>
+        <p>
+          We are a nonprofit that offers free tutoring, so if you want to help us out with our operations, please donate!
+        </p>
+        <LinkStyled to="https://www.paypal.com/donate/?hosted_button_id=JL9NRMP4AU546" ver="default">
+          PayPal
+        </LinkStyled>
+      </div>
     </Layout>
   );
 };

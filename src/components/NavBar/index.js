@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
+import { StaticImage } from "gatsby-plugin-image";
 
 import { Link } from "gatsby";
 
@@ -45,7 +46,6 @@ const LinkStyled = styled(Link)`
     text-decoration: none;
   }
 `;
-
 
 const useWindowSize = () => {
   const isSSR = typeof window === "undefined";
@@ -89,9 +89,10 @@ export default function NavBar(props) {
         elevation={0}
       >
         <Toolbar>
-          <Grid>
+          <Grid container
+            alignItems="center">
             <LinkStyled to="/" ver="lg">
-              CovEd
+              <StaticImage src="../../images/coved_logo.png" width={200} />
             </LinkStyled>
             {props.links.map((link) => (
               <LinkStyled key={link.link} to={link.link} ver="default">

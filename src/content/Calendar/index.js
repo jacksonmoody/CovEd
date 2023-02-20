@@ -3,7 +3,13 @@ import styled from "styled-components";
 import { FONTS, COLORS } from "../../constants";
 import { Link } from 'gatsby';
 import Layout from "../../components/Layout";
-const CALENDAR = 'https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23e7f2fb&ctz=America%2FLos_Angeles&showTitle=0&showPrint=0&showDate=0&showCalendars=0&src=Y19mOHVsYTYyajQwcDRwdXJjNjgydW1qamJtY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23A79B8E'
+import CalendarModal from "../../components/Modal";
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import listPlugin from '@fullcalendar/list';
+import interactionPlugin from "@fullcalendar/interaction";
+import googleCalendarPlugin from '@fullcalendar/google-calendar';
+import textVersion from "textversionjs";
 
 const TextThemes = {
   fontSize: {
@@ -40,11 +46,50 @@ const LinkStyled = styled(Link)`
 `;
 
 const Calendar = () => {
+  const [open, setOpen] = React.useState(false);
+  const [title, setTitle] = React.useState('');
+  const [date, setDate] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [location, setLocation] = React.useState('');
+
+  const handleEventClick = (arg) => {
+    setOpen(true);
+    setTitle(arg.event.title);
+    setDate(arg.event.start);
+    if (arg.event.extendedProps.description === undefined) {
+      setDescription("");
+    } else {
+      let newDescription = textVersion(arg.event.extendedProps.description);
+      while (newDescription.includes("mailto:")) {
+        const index = newDescription.indexOf("mailto:");
+        const email = newDescription.substring(index + 7, newDescription.indexOf(")", index));
+        const length = newDescription.length;
+        newDescription = newDescription.substring(0, index - email.length - 4) + email + newDescription.substring(newDescription.indexOf(")", index) + 2, length);
+      }
+      newDescription = newDescription.substring(newDescription.indexOf(")") + 1)
+      setDescription(newDescription);
+    }
+    setLocation(arg.event.extendedProps.location);
+    arg.jsEvent.preventDefault();
+  }
+
   return (
 
     <Layout>
-      <div style={{display: "flex", minWidth:"80vw", minHeight:"100vh", alignContent:"center", justifyContent: "center", justifySelf:"center", justifyItems:"center", flexDirection: "column"}}>
-          <div style = {{display: "flex", alignContent:"center", justifyContent: "center"}}> <iframe src={CALENDAR} width="900px" height="700px" frameBorder="0" marginHeight="0" marginWidth="0">Loading…</iframe> </div>
+      <div style={{ display: "flex", maxWidth: "90%", minHeight: "100vh", alignContent: "center", justifyContent: "center", justifySelf: "center", justifyItems: "center", flexDirection: "column", margin: "auto", marginTop: "50px" }}>
+        <FullCalendar
+          plugins={[dayGridPlugin, listPlugin, googleCalendarPlugin, interactionPlugin]}
+          headerToolbar={{
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listYear'
+          }}
+          googleCalendarApiKey={process.env.API}
+          events={{ googleCalendarId: 'c_f8ula62j40p4purc682umjjbmc@group.calendar.google.com' }}
+          eventClick={handleEventClick}
+          expandRows
+        />
+        <CalendarModal open={open} handleClose={() => setOpen(false)} title={title} description={description} date={date} location={location} />
       </div>
 
     </Layout>

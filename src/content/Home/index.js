@@ -270,10 +270,6 @@ const NewsSites = [
     text: "Stanford Daily",
     link: "https://www.stanforddaily.com/2020/06/29/coveducation-makes-impact-on-kids-after-school-closure/"
   },
-  {
-    key: "padding",
-    text: "padding-row-2-end"
-  }
 ]
 
 const WhyJoin = [
@@ -381,21 +377,26 @@ const HomePage = () => {
                     </Hidden>
                   ) : (
                     <Grid key={s.text} item sm={2} xs={6}>
-                      <a href = {s.link}>
-                      <ImText
-                        arrangement="vertical"
-                        shape="circle"
-                        img={s.imgsrc}
-                        minwidth="200px"
-                        minheight="200px"
-                      >
-                      </ImText>
+                      <a href={s.link}>
+                        <ImText
+                          arrangement="vertical"
+                          shape="circle"
+                          img={s.imgsrc}
+                          minwidth="200px"
+                          minheight="200px"
+                        >
+                        </ImText>
                       </a>
                     </Grid>
                   )
                 )
               })}
             </Grid>
+            <br /><br />
+            <h2>Our Partners:</h2> <br />
+            <p>
+              In the past, we have partnered with <a target="_blank" rel="noopener noreferrer" href="https://www.sd170.com/">Chicago Heights School District</a>, <a target="_blank" rel="noopener noreferrer" href="https://www.meusd.org/">Mountain Empire Unified School District</a>, <a target="_blank" rel="noopener noreferrer" href="https://www.cumbrehumboldt.org/">Cumbre Humboldt</a>, <a target="_blank" rel="noopener noreferrer" href="https://ccmnyc.org/mental-health-services/safe-brothers-arms/">SIMBA/ASET</a>, and <a target="_blank" rel="noopener noreferrer" href="">Bridges2Science</a> to provide tutoring to students in need. If you are interested in partnering with us, please <Link href='/contactus'> contact us</Link>!
+            </p>
           </Section>
 
           <Section backgroundColor='lightblue' p="100px">
