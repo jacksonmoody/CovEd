@@ -1,25 +1,19 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import Results from "./pages/Results";
-import ErrorPage from "./pages/ErrorPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Onboarding from "./pages/Onboarding";
+import ErrorPage from "./pages/ErrorPage";
 import { auth, db } from "./helpers/firebase";
 import { query, getDocs, collection, where, onSnapshot } from "firebase/firestore";
 import { onAuthStateChanged, getRedirectResult } from "firebase/auth";
 import { useState, useEffect } from "react";
 import Layout from "./pages/Layout";
-import ProtectedRoute from "./components/ProtectedRoute";
 import { addUser } from "./helpers/database";
-import React from 'react';
 
 export default function App() {
 
     const [loggedIn, setLoggedIn] = useState(false);
     const [currentUser, setcurrentUser] = useState(null);
-    const [onboarded, setOnboarded] = useState(false);
     const [initializingAuth, setInitializingAuth] = useState(true);
     const [initializingDB, setInitializingDB] = useState(true);
     const [data, setData] = useState(null)
@@ -60,7 +54,6 @@ export default function App() {
             setData(data);
             if (currentUser === null) return;
             const body = data.filter((user) => (user.uid === currentUser.uid));
-            setOnboarded(body[0].onboarded);
             if(initializingDB) setInitializingDB(false);
         });
 
@@ -72,29 +65,10 @@ export default function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={loggedIn ? <Layout username={currentUser.displayName} /> : <Layout />}>
-                    <Route index element={
-                        <ProtectedRoute loggedIn={loggedIn} onboarded={onboarded}>
-                            <Home />
-                        </ProtectedRoute>
-                    }
-                    />
+                <Route path="/" element={<Layout />}>
+                    <Route index element={loggedIn ? <Home /> : <Navigate to="/login"/>}/>
                     <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/"/>} />
-                    <Route path="onboarding" element={loggedIn ? <Onboarding users={data} currentUser={currentUser} /> : <Navigate to="/" />} />
-                    <Route path="register" element={!loggedIn ? <Register /> : <Navigate to="/onboarding"/>} />
-                    
-                    <Route path="profile" element={
-                        <ProtectedRoute loggedIn={loggedIn} onboarded={onboarded}>
-                            <Profile users={data} currentUser={currentUser} />
-                        </ProtectedRoute>
-                    }
-                    />
-                    <Route path="results" element={
-                        <ProtectedRoute loggedIn={loggedIn} onboarded={onboarded}>
-                            <Results users={data} currentUser={currentUser} />
-                        </ProtectedRoute>
-                    }
-                    />
+                    <Route path="register" element={!loggedIn ? <Register /> : <Navigate to="/"/>} />
                     <Route path="*" element={<ErrorPage />} />
                 </Route>
             </Routes>

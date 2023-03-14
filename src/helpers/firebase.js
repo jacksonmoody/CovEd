@@ -1,19 +1,21 @@
 import {initializeApp} from "firebase/app"
+import { getAnalytics } from "firebase/analytics";
 import { GoogleAuthProvider, getAuth, signInWithRedirect, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { addUser } from "./database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDP9JcuVgF-O0-_lnMiSed28l0OKPgWJ54",
-  authDomain: "t4sg-wintersession.firebaseapp.com",
-  projectId: "t4sg-wintersession",
-  storageBucket: "t4sg-wintersession.appspot.com",
-  messagingSenderId: "76655550196",
-  appId: "1:76655550196:web:ed9e2d47f02be2a47e08a1",
-  measurementId: "G-J0HJZ6LPTT"
-};
+   apiKey: "AIzaSyBT22aMNrMQTT7sOGb3NdRNppP80BQzqgs",
+   authDomain: "cov-education.firebaseapp.com",
+   projectId: "cov-education",
+   storageBucket: "cov-education.appspot.com",
+   messagingSenderId: "181471038447",
+   appId: "1:181471038447:web:3d88b13427d0336184441a",
+   measurementId: "G-1KFYWG4GXR"
+ };
  
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
@@ -23,7 +25,6 @@ async function signInWithGoogle(){
       await signInWithRedirect(auth, provider);
    } catch (err) {
       console.error(err);
-      alert("Error logging in with Google. Please try again.");
    }
 }
 
@@ -32,7 +33,6 @@ async function loginWithEmailAndPassword(email, password){
       await signInWithEmailAndPassword(auth, email, password);
    } catch (err) {
       console.error(err);
-      alert("Invalid username/password. Please try again.");
    }
 }
 
@@ -45,7 +45,6 @@ async function registerWithEmailAndPassword(name, email, password){
       
    } catch (err) {
       console.error(err);
-      alert("Error with registration. Please enter a new email and password and try again.");
    }
 }
 
