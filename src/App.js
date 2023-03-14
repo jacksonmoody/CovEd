@@ -9,6 +9,8 @@ import { onAuthStateChanged, getRedirectResult } from "firebase/auth";
 import { useState, useEffect } from "react";
 import Layout from "./pages/Layout";
 import { addUser } from "./helpers/database";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./helpers/theme";
 
 export default function App() {
 
@@ -54,7 +56,7 @@ export default function App() {
             setData(data);
             if (currentUser === null) return;
             const body = data.filter((user) => (user.uid === currentUser.uid));
-            if(initializingDB) setInitializingDB(false);
+            if (initializingDB) setInitializingDB(false);
         });
 
     });
@@ -63,15 +65,17 @@ export default function App() {
     if (loggedIn && initializingDB) return null;
 
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Layout />}>
-                    <Route index element={loggedIn ? <Home /> : <Navigate to="/login"/>}/>
-                    <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/"/>} />
-                    <Route path="register" element={!loggedIn ? <Register /> : <Navigate to="/"/>} />
-                    <Route path="*" element={<ErrorPage />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
+        <ThemeProvider theme = {theme}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Layout />}>
+                        <Route index element={loggedIn ? <Home /> : <Navigate to="/login" />} />
+                        <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/" />} />
+                        <Route path="register" element={!loggedIn ? <Register /> : <Navigate to="/" />} />
+                        <Route path="*" element={<ErrorPage />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </ThemeProvider>
     );
 }
