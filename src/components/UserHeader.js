@@ -26,7 +26,7 @@ export default function UserHeader () {
 
     const nameprops = {
         color: 'primary.contrastText',
-        fontFamily: 'Times New Roman',
+        fontFamily: 'Abhaya Libre',
         fontWeight: 350,
         m: 2
     }
