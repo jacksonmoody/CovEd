@@ -52,5 +52,3 @@ export default function UserHeader () {
         </ThemeProvider>
      );
 }
-
-// Placeholders: user pfp (stored in db?), username (store in db), {mentee or mentor} dashboard (status stored in db?)

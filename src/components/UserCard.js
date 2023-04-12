@@ -15,8 +15,6 @@ export default function UserCard({ user }) {
 
     const cardinfo = [user.name, user.timezone, user.subjects.join(', '), user.gradeLevels.join(', ')]
 
-    // When using db just replace above with user.name, user.timezone, user.subjects, user.gradelevels (or whatever you call them)
-
     return (
 
         <Card sx={cardprops}>
@@ -32,5 +30,3 @@ export default function UserCard({ user }) {
 
     );
 }
-
-// Placeholders: user pfp (stored in db?), username (store in db), time zone, subjects, grade level (stored in db?)
