@@ -5,6 +5,7 @@ import Stack from  '@mui/material/Stack';
 import Footer from '../components/Footer';
 import '../styling/Home.css'
 import { CssBaseline } from '@mui/material';
+import MentorGrid from '../components/MentorGrid';
 
 function Home() {
     return (
@@ -14,6 +15,7 @@ function Home() {
         <Grid item xs={12}>
             <Stack height="75vh" direction='row'>
                 <Sidebar/>
+                <MentorGrid/>
             </Stack>
         </Grid>
         <Grid item xs={12}>

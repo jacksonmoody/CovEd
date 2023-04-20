@@ -3,11 +3,8 @@ import { ThemeProvider } from '@emotion/react';
 import { theme } from '../helpers/theme';
 import { Toolbar } from '@mui/material';
 import { NavLink } from "react-router-dom";
-import Drawer from '@mui/material/Drawer';
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-
-
-
 
 export default function Sidebar() {
     const drawerWidth = 240;
@@ -30,26 +27,22 @@ export default function Sidebar() {
   
     return (
       <ThemeProvider theme={theme}>
-        <Drawer
-          variant="permanent"
+        <Box
+          height="100%"
           sx={{
             width: drawerWidth,
             flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {
-              width: drawerWidth,
-              boxSizing: 'border-box',
-              backgroundColor: '#E8E8E8'
-            },
+            backgroundColor: '#E8E8E8',
           }}
         >
           <Toolbar />
-          <Stack mt={24}>
+          <Stack mt={0}>
             {sidebaritems.map((link) => (
               <NavLink to={link[1]} 
                  style={linkprops}>{link[0]}</NavLink>
             ))}
           </Stack>
-        </Drawer>
+        </Box>
       </ThemeProvider>
     );
   }

@@ -27,9 +27,9 @@ export default function MentorGrid () {
     const gridprops ={
         display: 'flex',
         flexDirection: 'row',
-        m: 0,
+        mt: 2,
         ml: 2,
-        mt: 30,
+        overflowY: 'scroll',
 
     }
     return (
