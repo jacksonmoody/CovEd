@@ -7,7 +7,28 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
 
-export default function UserHeader () {
+export default function UserHeader (props) {
+
+    // const currentUser = props.users.filter((user) => (user.uid === props.currentUser.uid))[0];
+    const currentUser = {
+        email: 'mentor1@example.com',
+        firstName: 'Mentor',
+        lastName: 'One',
+        phone: '123-456-7890',
+        school: 'School 1',
+        pronouns: 'She/Her',
+        subjects: ['Math', 'Science'],
+        timeZone: 'EST',
+        daysAvailable: ['Monday', 'Wednesday'],
+        gradeLevels: ['1st', '2nd'],
+        collegePrep: true,
+        languages: ['English', 'Spanish'],
+        specialAssistance: true,
+        communities: ['Community 1', 'Community 2'],
+        bio: 'Bio for Mentor One',
+        gradeLevel: '12th',
+        image: 'image1.jpg'
+      }
 
     const headerprops = {
         backgroundColor: 'primary.main',
@@ -44,8 +65,8 @@ export default function UserHeader () {
                 </Grid>
                 <Grid item>
                     <Stack>
-                        <Typography variant='h3' sx={nameprops}>Sally Student</Typography>
-                        <Typography variant='h5' sx={subtextprops}>Mentee Dashboard</Typography>
+                        <Typography variant='h3' sx={nameprops}>{currentUser.firstName + " " + currentUser.lastName}</Typography>
+                        <Typography variant='h5' sx={subtextprops}>{currentUser.userType} Dashboard</Typography>
                     </Stack>
                 </Grid>
             </Grid>

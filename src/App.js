@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ErrorPage from "./pages/ErrorPage";
-import FindAMentor from "./pages/FindAMentor";
 import { auth, db } from "./helpers/firebase";
 import { query, getDocs, collection, where, onSnapshot } from "firebase/firestore";
 import { onAuthStateChanged, getRedirectResult } from "firebase/auth";
@@ -12,7 +11,8 @@ import Layout from "./pages/Layout";
 import { addUser } from "./helpers/database";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./helpers/theme";
-import MyProfile from "./pages/MyProfile";
+import UserProfile from "./components/UserProfile";
+import UserGrid from "./components/UserGrid";
 
 export default function App() {
 
@@ -74,8 +74,8 @@ export default function App() {
                         <Route index element={loggedIn ? <Home /> : <Navigate to="/login" />} />
                         <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/" />} />
                         <Route path="register" element={!loggedIn ? <Register /> : <Navigate to="/" />} />
-                        <Route path="myprofile" element={loggedIn ? <MyProfile /> : <Navigate to="/login" />} />
-                        <Route path="findamentor" element={loggedIn ? <FindAMentor/> : <Navigate to="/login" />} />
+                        <Route path="myprofile" element={loggedIn ? <UserProfile /> : <Navigate to="/login" />} />
+                        <Route path="findamentor" element={loggedIn ? <UserGrid/> : <Navigate to="/login" />} />
                         <Route path="*" element={<ErrorPage />} />
                     </Route>
                 </Routes>

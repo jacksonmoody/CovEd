@@ -1,5 +1,5 @@
 import React from 'react'
-import UserCard from '../components/UserCard'
+import UserCard from './UserCard'
 import Grid from '@mui/material/Grid'
 
 export default function MentorGrid () {

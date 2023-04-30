@@ -6,7 +6,9 @@ import Footer from '../components/Footer';
 import '../styling/Home.css'
 import { CssBaseline } from '@mui/material';
 
+
 function Home() {
+    
     return (
         <Grid container width='100%' height='100%' spacing={0} display='flex' direction='column'>
         <CssBaseline/>

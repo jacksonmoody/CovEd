@@ -67,13 +67,13 @@ export default function Footer() {
                         </Box>
                 </Grid>
                 <Grid item spacing={2}>
-                    <IconButton aria-label="facebook.com" onClick={() => window.open('https://www.facebook.com')}>
+                    <IconButton aria-label="facebook.com" onClick={() => window.open('https://www.facebook.com/CovEducationInc')}>
                         <FacebookIcon sx={{fontSize:'40px', color: 'white'}}/>
                     </IconButton>
-                    <IconButton aria-label="instagram.com" onClick={() => window.open('https://www.instagram.com')}>
+                    <IconButton aria-label="instagram.com" onClick={() => window.open('https://www.instagram.com/coveducation/')}>
                         <InstagramIcon sx={{fontSize:'40px', color: 'white'}}/>
-                    </IconButton>
-                    <IconButton aria-label="twitter.com" onClick={() => window.open('https://www.twitter.com')}>
+                    </IconButton> 
+                    <IconButton aria-label="twitter.com" onClick={() => window.open('https://twitter.com/coveducation')}>
                         <TwitterIcon sx={{fontSize:'40px', color: 'white'}}/>
                     </IconButton>
                 </Grid>

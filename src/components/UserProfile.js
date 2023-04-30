@@ -6,23 +6,42 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
 
-export default function UserProfile() {
-    
-    const samplebio = "Hi! I'm Maria Mentor. I'm a 4th year student at UCLA studying Computer Science. I'm passionate about helping students learn and grow. I've been tutoring for 3 years and have experience tutoring students in math, science, and English. I'm looking forward to working with you!"
+export default function UserProfile(props) {
+    const currentUser = {
+        email: 'mentor1@example.com',
+        firstName: 'Mentor',
+        lastName: 'One',
+        phone: '123-456-7890',
+        school: 'School 1',
+        pronouns: 'She/Her',
+        subjects: ['Math', 'Science'],
+        timeZone: 'EST',
+        daysAvailable: ['Monday', 'Wednesday'],
+        gradeLevels: ['1st', '2nd'],
+        collegePrep: true,
+        languages: ['English', 'Spanish'],
+        specialAssistance: true,
+        communities: ['Community 1', 'Community 2'],
+        bio: 'Bio for Mentor One',
+        gradeLevel: '12th',
+        image: 'image1.jpg',
+        location: 'New York, NY'
+      }
+    // const currentUser = props.users.filter((user) => (user.uid === props.currentUser.uid))[0];
 
     return (
         <Stack direction='column' mt={4} ml={8} width="100%">
             <Box width="100%" height="140px" sx={{display: 'flex', direction: 'row'}}>
-                <Avatar alt='User Profile' src={'../static/placeholderpic.jpg'} sx={{height: '100px', width: '100px'}}/>
+                <Avatar alt='User Profile' src={currentUser.image} sx={{height: '100px', width: '100px'}}/>
                 <Stack spacing={1} ml={2}>
                     <Typography variant='h6'>
-                        Maria Mentor
+                        {currentUser.firstName + " " + currentUser.lastName}
                     </Typography>
                     <Typography variant='p'>
-                        University of California Los Angeles
+                        {currentUser.school}
                     </Typography>
                     <Typography variant='p'>
-                        Class of 2021
+                        {currentUser.gradeLevel}
                     </Typography>
                 </Stack>
             </Box>
@@ -32,7 +51,7 @@ export default function UserProfile() {
                         Bio
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        {samplebio}
+                        {currentUser.bio}
                     </Typography>
                 </Stack>
             </Box>
@@ -42,39 +61,39 @@ export default function UserProfile() {
                         Subjects
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        Math, Science
+                        {currentUser.subjects.join(', ')}
                     </Typography>
                     <Typography variant='p' fontSize={14} mt={2}>
                         Grade Levels
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        Middle School, High School
+                        {currentUser.gradeLevels.join(', ')}
                     </Typography>
                     <Typography variant='p' fontSize={14} mt={2}>
                         {"Language(s)"}
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        English, Spanish
+                        {currentUser.languages.join(', ')}
                     </Typography>
                 </Grid>
                 <Grid item spacing={1} ml={2} xs={4} display='flex' direction='column' mr={2}>
                 <Typography variant='p' fontSize={14}>
-                        Location
+                        {"Location(s)"}
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        Los Angeles, California
+                        {currentUser.location}
                     </Typography>
                     <Typography variant='p' fontSize={14} mt={2}>
                         Time Zone
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        {"Pacific Standard Time (GMT -08:00)"}
+                        {currentUser.timeZone}
                     </Typography>
                     <Typography variant='p' fontSize={14} mt={2}>
                         Email
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        mariamentor@gmail.com
+                        {currentUser.email}
                     </Typography>
                 </Grid>
             </Box>

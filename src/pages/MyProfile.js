@@ -7,7 +7,7 @@ import UserProfile  from '../components/UserProfile';
 import Footer from '../components/Footer';
 import Stack from  '@mui/material/Stack';
 
-function MyProfile() {
+function MyProfile(props) {
     return (
         <Grid container width='100%' height='100%' spacing={0} display='flex' direction='column'>
             <CssBaseline/>
