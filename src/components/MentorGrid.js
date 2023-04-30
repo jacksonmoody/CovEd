@@ -3,6 +3,7 @@ import UserCard from '../components/UserCard'
 import Grid from '@mui/material/Grid'
 
 export default function MentorGrid () {
+    // Must pass in users above and delete/comment out the below
     const users = [
         {
           name: 'Maria Mentor',
@@ -24,29 +25,19 @@ export default function MentorGrid () {
         }
       ]
 
-    const gridprops ={
+    const gridprops = {
         display: 'flex',
         flexDirection: 'row',
         mt: 2,
         ml: 2,
         overflowY: 'scroll',
-
     }
+
     return (
         <Grid container spacing={2} sx={gridprops}>
-            {users.map((user, index) => (
+            {users.map((user) => (
                 <Grid item>
-                    <UserCard key={index} user={user}/>
-                </Grid>
-            ))}
-            {users.map((user, index) => (
-                <Grid item>
-                    <UserCard key={index} user={user}/>
-                </Grid>
-            ))}
-            {users.map((user, index) => (
-                <Grid item>
-                    <UserCard key={index} user={user}/>
+                    <UserCard cardId={user.id} user={user}/>
                 </Grid>
             ))}
         </Grid>
