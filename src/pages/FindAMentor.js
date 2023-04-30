@@ -7,7 +7,7 @@ import '../styling/Home.css'
 import { CssBaseline } from '@mui/material';
 import MentorGrid from '../components/MentorGrid';
 
-function Home() {
+function Home(props) {
     return (
         <Grid container width='100%' height='100%' spacing={0} display='flex' direction='column'>
         <CssBaseline/>
@@ -15,7 +15,7 @@ function Home() {
         <Grid item xs={12}>
             <Stack height="75vh" direction='row'>
                 <Sidebar/>
-                <MentorGrid/>
+                <MentorGrid users={props.users}/>
             </Stack>
         </Grid>
         <Grid item xs={12}>

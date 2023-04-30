@@ -6,10 +6,18 @@ import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
 import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../helpers/firebase';
 
-export default function UserCard({ user }) {
+export default function UserCard({ user, cardId }, props) {
     const samplebio = "Hi! I'm Maria Mentor. I'm a 4th year student at UCLA studying Computer Science. I'm passionate about helping students learn and grow. I've been tutoring for 3 years and have experience tutoring students in math, science, and English. I'm looking forward to working with you!"
-    
+    const menteeId = "abc123"
+    const mentorId = "def456"
+    // sampleIds to test db funcitonality
+    // const currentUser = props.users.filter((user) => (user.uid === props.currentUser.uid))[0];
+
     const cardprops = {
         width: '260px',
         height: '300px',
@@ -37,8 +45,50 @@ export default function UserCard({ user }) {
     const cardinfo = [user.name, user.timezone, user.subjects.join(', '), user.gradeLevels.join(', ')]
 
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
+    const [requested, setRequested] = React.useState(false);
+
+    async function handleRequest() {
+        try {
+          const docRef = await addDoc(collection(db, "matches"), {
+            menteeId: menteeId,
+            mentorId: mentorId,
+            accepted: false,
+          });
+          setRequested(true);
+          console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+    }
+
+    function checkRequest() {
+        // const requests = props.requests.filter((request) => (request.mentorId === cardId && request.menteeId === currentUser.id));
+        // needs to pass in actual requests under props before using above line
+        const requests = props.requests.filter((request) => (request.mentorId === mentorId && request.menteeId === menteeId));
+        console.log("Requests:")
+        console.log(requests)
+        if (requests.length > 0) {
+            setRequested(true);
+        }
+    }
+
+    const handleOpen = () => {
+        setOpen(true)
+        checkRequest();
+        // checkRequest(currentUser.id, cardId);
+        // needs actual user log in and pass in 'opposite' user type to MentorGrid.js before using above
+    };
+
     const handleClose = () => setOpen(false);
+    
+    const requestbuttonprops = {
+        backgroundColor: 'primary.main',
+        color: 'white',
+        borderRadius: 4,
+        width: '100px',
+        height: '40px',
+        mb: 2,
+    };
 
     return (
         <div className='root'>
@@ -73,8 +123,12 @@ export default function UserCard({ user }) {
                             </Typography>
                         </Stack>
                     </Grid>
-                    <Grid item xs={2} height='30px' display='flex' justifyContent='right'>
-                        <CloseIcon fontSize='large' sx={{color: '#C4C4C4'}} onClick={handleClose}/>
+                    <Grid item xs={2} direction='column' display='flex' justifyContent='right'>
+                        <CloseIcon fontSize='large' sx={{color: '#C4C4C4', ml: 8}} onClick={handleClose}/>
+                        <Box flexGrow={1} />
+                        <Button variant="contained" disabled={requested} onClick={handleRequest} sx={requestbuttonprops}>
+                            {requested ? 'Requested' : 'Request'}
+                        </Button>
                     </Grid>
                     <Grid item xs={12} mr={2}>
                         <Stack spacing={1}>
