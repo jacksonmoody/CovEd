@@ -61,12 +61,12 @@ export default function UserHeader (props) {
         <ThemeProvider theme={theme}>
             <Grid container sx={headerprops} xs={12}>
                 <Grid item>
-                    <Avatar alt="Username" src={'../static/placeholderpic.jpg'} sx={profilepicprops}/>
+                    <Avatar alt="Username" src={props.currentUser.image} sx={profilepicprops}/>
                 </Grid>
                 <Grid item>
                     <Stack>
-                        <Typography variant='h3' sx={nameprops}>{currentUser.firstName + " " + currentUser.lastName}</Typography>
-                        <Typography variant='h5' sx={subtextprops}>{currentUser.userType} Dashboard</Typography>
+                        <Typography variant='h3' sx={nameprops}>{props.currentUser.name}</Typography>
+                        <Typography variant='h5' sx={subtextprops}>{props.currentUser.type} Dashboard</Typography>
                     </Stack>
                 </Grid>
             </Grid>

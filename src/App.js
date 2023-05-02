@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ErrorPage from "./pages/ErrorPage";
 import { auth, db } from "./helpers/firebase";
-import { query, getDocs, collection, where, onSnapshot } from "firebase/firestore";
-import { onAuthStateChanged, getRedirectResult } from "firebase/auth";
+import { query, collection, where, onSnapshot } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import Layout from "./pages/Layout";
-import { addUser } from "./helpers/database";
+import LayoutMinimal from "./pages/LayoutMinimal";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./helpers/theme";
 import UserProfile from "./components/UserProfile";
 import UserGrid from "./components/UserGrid";
+import Onboarding from "./components/Onboarding";
 
 export default function App() {
 
@@ -20,26 +20,11 @@ export default function App() {
     const [currentUser, setcurrentUser] = useState(null);
     const [initializingAuth, setInitializingAuth] = useState(true);
     const [initializingDB, setInitializingDB] = useState(true);
-    const [data, setData] = useState(null)
+    const [userData, setUserData] = useState(null);
+    const [userType, setUserType] = useState(null);
+    const [onboarded, setOnboarded] = useState(false);
 
     useEffect(() => {
-
-        async function handleRedirectResult() {
-            try {
-                const result = await getRedirectResult(auth);
-                if (!result) return;
-                const user = result.user;
-                const q = query(collection(db, "users"), where("uid", "==", user.uid));
-                const docs = await getDocs(q);
-                if (docs.docs.length === 0) {
-                    await addUser(user.uid, user.displayName, "google", user.email)
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        handleRedirectResult();
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -53,31 +38,48 @@ export default function App() {
             }
         })
 
-        onSnapshot(query(collection(db, "users")), (snapshot) => {
+        if (currentUser == null) return;
+
+        onSnapshot(query(collection(db, "mentors"), where("uid", "==", currentUser?.uid)), (snapshot) => {
             const data = snapshot.docs.map((doc) => (doc.data()));
-            setData(data);
-            if (currentUser === null) return;
-            const body = data.filter((user) => (user.uid === currentUser.uid));
+            if (data.length !== 0){
+                setUserData(data[0]);
+                setUserType("Mentor");
+                setOnboarded(data[0].onboarded);
+            }
             if (initializingDB) setInitializingDB(false);
         });
 
+        onSnapshot(query(collection(db, "mentees"), where("uid", "==", currentUser?.uid)), (snapshot) => {
+            const data = snapshot.docs.map((doc) => (doc.data()));
+            if (data.length !== 0){
+                setUserData(data[0]);
+                setUserType("Mentee");
+                setOnboarded(data[0].onboarded);
+            }
+            if (initializingDB) setInitializingDB(false);
+        });
     });
 
     if (initializingAuth) return null;
     if (loggedIn && initializingDB) return null;
 
     return (
-        <ThemeProvider theme = {theme}>
+        <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Layout />}>
-                        <Route index element={loggedIn ? <Home /> : <Navigate to="/login" />} />
-                        <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/" />} />
-                        <Route path="register" element={!loggedIn ? <Register /> : <Navigate to="/" />} />
-                        <Route path="myprofile" element={loggedIn ? <UserProfile /> : <Navigate to="/login" />} />
-                        <Route path="findamentor" element={loggedIn ? <UserGrid/> : <Navigate to="/login" />} />
-                        <Route path="*" element={<ErrorPage />} />
+                    <Route path="/" element={<Layout loggedIn={loggedIn} currentUser={userData}/>}>
+                        <Route index element={loggedIn && onboarded ? <UserGrid /> : loggedIn ? <Navigate to="/register/onboarding" /> : <Navigate to="/register/login" />}  />
+                        <Route path="profile" element={loggedIn && onboarded ? <UserProfile currentUser={userData}/> : loggedIn ? <Navigate to ="register/onboarding"/> :<Navigate to="/register/login" />} />
+                        <Route path="match" element={loggedIn && onboarded ? <UserGrid /> : loggedIn ? <Navigate to="/register/onboarding" /> : <Navigate to="/register/login" />} />
                     </Route>
+                    <Route path="/register" element={<LayoutMinimal loggedIn={loggedIn} />}>
+                        <Route index element={!loggedIn ? <Login /> : <Navigate to="/" />} />
+                        <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/" />} />
+                        <Route path="newaccount" element={!loggedIn ? <Register /> : <Navigate to="/" />} />
+                        <Route path="onboarding" element={loggedIn && onboarded ? <Navigate to="/" /> : loggedIn ? <Onboarding currentUser={userData} setOnboarded={setOnboarded}/> : <Navigate to="/register/login" />} />
+                    </Route>
+                    <Route path="*" element={<ErrorPage />} />
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

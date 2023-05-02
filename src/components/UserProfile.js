@@ -32,10 +32,10 @@ export default function UserProfile(props) {
     return (
         <Stack direction='column' mt={4} ml={8} width="100%">
             <Box width="100%" height="140px" sx={{display: 'flex', direction: 'row'}}>
-                <Avatar alt='User Profile' src={currentUser.image} sx={{height: '100px', width: '100px'}}/>
+                <Avatar alt='User Profile' src={props.currentUser.image} sx={{height: '100px', width: '100px'}}/>
                 <Stack spacing={1} ml={2}>
                     <Typography variant='h6'>
-                        {currentUser.firstName + " " + currentUser.lastName}
+                        {props.currentUser.name}
                     </Typography>
                     <Typography variant='p'>
                         {currentUser.school}
@@ -93,7 +93,7 @@ export default function UserProfile(props) {
                         Email
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        {currentUser.email}
+                        {props.currentUser.email}
                     </Typography>
                 </Grid>
             </Box>

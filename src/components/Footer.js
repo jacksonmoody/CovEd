@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '../helpers/theme';
 import Typography from '@mui/material/Typography';
-import { NavLink } from 'react-router-dom';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -12,15 +11,10 @@ import IconButton from '@mui/material/IconButton';
 
 export default function Footer() {
 
-    const footeritems = [
-        ['How It Works', '/howitworks'],
-        ['Resources', '/resources'],
-        ['FAQ', '/faq'],
-        ['Meet Our Team', '/meetourteam'],
-        ['Contact Us', '/contactus'],
-      ];
+    const footeritems = [['Programs', 'https://www.coved.org/programs'], ['Resources', 'https://www.coved.org/resources'], ['FAQ', 'https://www.coved.org/faqs'], ['Meet Our Team', 'https://www.coved.org/team'], ['Contact Us', 'https://www.coved.org/contact'], ['Donate', 'https://www.coved.org/donate']];
 
     const footerprops = {
+        bottom: 0,
         display: 'flex',
         flexDirection: 'row',
         m: 0,
@@ -61,8 +55,8 @@ export default function Footer() {
                 <Grid item xs={8}>
                         <Box justifyContent='space-between'>
                             {footeritems.map((link) => (
-                                <NavLink to={link[1]} 
-                                    style={linkprops}>{link[0]}</NavLink>
+                                <a href={link[1]} 
+                                    style={linkprops} target="_blank">{link[0]}</a>
                                 ))}
                         </Box>
                 </Grid>

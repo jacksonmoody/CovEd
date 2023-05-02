@@ -1,10 +1,10 @@
 import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
+import { auth } from '../helpers/firebase';
+import { useNavigate } from 'react-router-dom';
 
+const Navbar = (props) => {
 
-
-const Navbar = () => {
-    
     const navbarprops = {
         backgroundColor: '#FFFFFF',
         color: 'primary.main'
@@ -17,9 +17,9 @@ const Navbar = () => {
     }
 
     const linkprops = {
-        textDecoration:'none',
+        textDecoration: 'none',
         fontSize: '16px',
-        underline:'none',
+        underline: 'none',
         marginLeft: '40px',
         marginBottom: '20px',
         color: 'inherit',
@@ -33,34 +33,48 @@ const Navbar = () => {
         color: 'white',
         textTransform: 'none',
         fontSize: '16px',
-        borderRadius: 1, 
-        width: '140px', 
-        height: '40px', 
-        p: 1, 
+        borderRadius: 1,
+        width: '140px',
+        height: '40px',
+        p: 1,
         ml: 4
     }
 
-    const navitems = [['How It Works', '/howitworks'], ['Resources', '/resources'], ['FAQ', '/faq'], ['Meet Our Team', '/meetourteam'], ['Contact Us', '/contactus']];
+    const navitems = [['Programs', 'https://www.coved.org/programs'], ['Resources', 'https://www.coved.org/resources'], ['FAQ', 'https://www.coved.org/faqs'], ['Meet Our Team', 'https://www.coved.org/team'], ['Contact Us', 'https://www.coved.org/contact'], ['Donate', 'https://www.coved.org/donate']];
+    
+    const navigate = useNavigate();
+
+    function logout() {
+        auth.signOut();
+        navigate('/register/login');
+      }
 
     return (
-        <AppBar sx={navbarprops}position="static">
+        <AppBar sx={navbarprops} position="static">
             <Toolbar>
                 <Typography variant="h6" sx={covedprops}>
                     CovEd
                 </Typography>
-                <Box>
-                    {navitems.map((link) => (
-                    <NavLink style={linkprops}  to={link[1]} >{link[0]}</NavLink>))}
+                <Box style={{ flex: 1 }}>
+                    {navitems?.map((link) => (
+                        <a className="link" style={linkprops} href ={link[1]} target="_blank">{link[0]}</a>
+                    ))}
                 </Box>
-                <Box ml={14}>
-                    <NavLink style={linkprops} to='/login'>Login</NavLink>
-                    <Button to='/register' variant="contained" sx={registerprops}>
-                        Sign Up
-                    </Button>
+                <Box>
+                    {!props.loggedIn ?
+                        <>
+                            <NavLink style={linkprops} to='/register/login'>Login</NavLink>
+                            <Button onClick={() => navigate('/register/newaccount')} variant="contained" sx={registerprops}>
+                                Sign Up
+                            </Button>
+                        </>
+                        : <Button onClick={logout} variant="contained" sx={registerprops}>
+                            Log Out
+                        </Button>}
                 </Box>
             </Toolbar>
         </AppBar>
     );
-    };
+};
 
 export default Navbar;

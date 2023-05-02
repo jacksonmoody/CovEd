@@ -14,5 +14,5 @@ export const theme = createTheme({
   },
   typography: {
     fontFamily: '"Raleway", "Montserrat", sans-serif',
-  },
+  }
 });

@@ -10,10 +10,8 @@ export default function Sidebar() {
     const drawerWidth = 240;
   
     const sidebaritems = [
-      ['My Profile', '/myprofile'],
-      ['Find a Mentor', '/findamentor'],
-      ['Speaker Series', '/speakerseries'],
-      ['Requests', '/requests'],
+      ['My Profile', '/profile'],
+      ['Mentor Match', '/match'],
     ];
 
     const linkprops = {
