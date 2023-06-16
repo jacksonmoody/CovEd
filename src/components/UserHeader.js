@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
 
-export default function UserHeader () {
+export default function UserHeader (props) {
 
     const headerprops = {
         backgroundColor: 'primary.main',
@@ -38,14 +38,14 @@ export default function UserHeader () {
     }
     return (
         <ThemeProvider theme={theme}>
-            <Grid container sx={headerprops} xs={12}>
+            <Grid container sx={headerprops}>
                 <Grid item>
-                    <Avatar alt="Username" src={'../static/placeholderpic.jpg'} sx={profilepicprops}/>
+                    <Avatar alt="Username" src={props.currentUser?.image} sx={profilepicprops}/>
                 </Grid>
                 <Grid item>
                     <Stack>
-                        <Typography variant='h3' sx={nameprops}>Sally Student</Typography>
-                        <Typography variant='h5' sx={subtextprops}>Mentee Dashboard</Typography>
+                        <Typography variant='h3' sx={nameprops}>{props.currentUser?.name}</Typography>
+                        <Typography variant='h5' sx={subtextprops}>{props.currentUser?.type} Dashboard</Typography>
                     </Stack>
                 </Grid>
             </Grid>
