@@ -21,9 +21,7 @@ export default function MentorGrid(props) {
           .map((request) => request.menteeId);
         onSnapshot(query(collection(db, "mentees")), (snapshot) => {
           const data = snapshot.docs.map((doc) => doc.data());
-          const filteredData = data.filter((mentee) =>
-            menteeIds.includes(mentee.uid)
-          );
+          const filteredData = data.filter((mentee) => menteeIds.includes(mentee.uid));
           setData(filteredData);
         });
       }
@@ -40,18 +38,14 @@ export default function MentorGrid(props) {
     flexDirection: "row",
     mt: 2,
     ml: 2,
-    overflowY: "scroll",
+    overflowY: "scroll"
   };
 
   return (
     <Grid container spacing={2} sx={gridprops}>
       {data?.map((user, id) => (
         <Grid item key={id}>
-          <UserCard
-            user={user}
-            requests={requests}
-            currentUser={props.currentUser}
-          />
+          <UserCard user={user} requests={requests} currentUser={props.currentUser} />
         </Grid>
       ))}
     </Grid>

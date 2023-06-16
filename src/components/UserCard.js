@@ -18,7 +18,7 @@ export default function UserCard(props) {
     display: "flex",
     justifyContent: "center",
     p: 2,
-    backgroundColor: "white",
+    backgroundColor: "white"
   };
 
   const modalprops = {
@@ -32,14 +32,14 @@ export default function UserCard(props) {
     borderRadius: 4,
     boxShadow: 24,
     p: 6,
-    display: "flex",
+    display: "flex"
   };
 
   const cardinfo = [
     props.user.name,
     props.user.timezone,
     props.user.subjects?.join(", "),
-    props.user.gradeLevels?.join(", "),
+    props.user.gradeLevels?.join(", ")
   ];
 
   const [open, setOpen] = React.useState(false);
@@ -52,13 +52,13 @@ export default function UserCard(props) {
         await setDoc(doc(db, "matches", props.user.uid), {
           menteeId: props.currentUser.uid,
           mentorId: props.user.uid,
-          accepted: false,
+          accepted: false
         });
         setRequested(true);
       } else if (props.currentUser.type === "Mentor") {
         const docRef = doc(db, "matches", props.currentUser.uid);
         await updateDoc(docRef, {
-          accepted: true,
+          accepted: true
         });
         setAccepted(true);
       }
@@ -72,14 +72,12 @@ export default function UserCard(props) {
     if (props.currentUser.type === "Mentor") {
       requests = props.requests.filter(
         (request) =>
-          request.mentorId === props.currentUser.uid &&
-          request.menteeId === props.user.uid
+          request.mentorId === props.currentUser.uid && request.menteeId === props.user.uid
       );
     } else if (props.currentUser.type === "Mentee") {
       requests = props.requests.filter(
         (request) =>
-          request.mentorId === props.user.uid &&
-          request.menteeId === props.currentUser.uid
+          request.mentorId === props.user.uid && request.menteeId === props.currentUser.uid
       );
     }
     if (requests.length > 0) {
@@ -101,7 +99,7 @@ export default function UserCard(props) {
     borderRadius: 4,
     width: "170px",
     height: "40px",
-    mb: 2,
+    mb: 2
   };
 
   return (
@@ -117,8 +115,7 @@ export default function UserCard(props) {
             <Typography
               key={index}
               variant={index === 0 ? "h6" : "p"}
-              sx={{ padding: 0, margin: 2, textAlign: "center" }}
-            >
+              sx={{ padding: 0, margin: 2, textAlign: "center" }}>
               {text}
             </Typography>
           ))}
@@ -128,8 +125,7 @@ export default function UserCard(props) {
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+        aria-describedby="modal-modal-description">
         <Grid container sx={modalprops}>
           <Grid item xs={9} sx={{ display: "flex", mt: 2 }}>
             <Avatar
@@ -138,38 +134,22 @@ export default function UserCard(props) {
               sx={{ height: "100px", width: "100px" }}
             />
             <Stack spacing={1} ml={2}>
-              <Typography variant="h6">
-                {props.user.name ?? "No Name Provided"}
-              </Typography>
-              <Typography variant="p">
-                {props.user.school ?? "No School Provided"}
-              </Typography>
+              <Typography variant="h6">{props.user.name ?? "No Name Provided"}</Typography>
+              <Typography variant="p">{props.user.school ?? "No School Provided"}</Typography>
               <Typography variant="p">
                 {props.user.gradeLevel ?? "No Grade Level Provided"}
               </Typography>
             </Stack>
           </Grid>
-          <Grid
-            container
-            item
-            xs={3}
-            direction="column"
-            display="flex"
-            justifyContent="right"
-          >
-            <CloseIcon
-              fontSize="large"
-              sx={{ color: "#C4C4C4", ml: 8 }}
-              onClick={handleClose}
-            />
+          <Grid container item xs={3} direction="column" display="flex" justifyContent="right">
+            <CloseIcon fontSize="large" sx={{ color: "#C4C4C4", ml: 8 }} onClick={handleClose} />
             <Box flexGrow={0.3} />
             {props.user.type === "Mentor" ? (
               <Button
                 variant="contained"
                 disabled={requested}
                 onClick={handleRequest}
-                sx={requestbuttonprops}
-              >
+                sx={requestbuttonprops}>
                 {requested ? "Requested" : "Request"}
               </Button>
             ) : (
@@ -177,8 +157,7 @@ export default function UserCard(props) {
                 variant="contained"
                 disabled={accepted}
                 onClick={handleRequest}
-                sx={requestbuttonprops}
-              >
+                sx={requestbuttonprops}>
                 {accepted ? "Accepted" : "Accept Request"}
               </Button>
             )}
@@ -193,12 +172,7 @@ export default function UserCard(props) {
               </Typography>
             </Stack>
           </Grid>
-          <Grid
-            container
-            display="flex"
-            justifyContent="space-between"
-            width="100%"
-          >
+          <Grid container display="flex" justifyContent="space-between" width="100%">
             <Grid container item xs={4} display="flex" direction="column">
               <Typography variant="p" fontSize={14}>
                 Subjects
@@ -212,8 +186,7 @@ export default function UserCard(props) {
                     Grade Levels
                   </Typography>
                   <Typography variant="p" fontSize={14}>
-                    {props.user.gradeLevels?.join(", ") ??
-                      "No Grade Levels Provided"}
+                    {props.user.gradeLevels?.join(", ") ?? "No Grade Levels Provided"}
                   </Typography>
                 </>
               )}
@@ -224,15 +197,7 @@ export default function UserCard(props) {
                 {props.user.languages?.join(", ") ?? "No Languages Provided"}
               </Typography>
             </Grid>
-            <Grid
-              container
-              item
-              ml={2}
-              xs={4}
-              display="flex"
-              direction="column"
-              mr={2}
-            >
+            <Grid container item ml={2} xs={4} display="flex" direction="column" mr={2}>
               <Typography variant="p" fontSize={14}>
                 Location
               </Typography>
