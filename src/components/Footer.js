@@ -84,7 +84,7 @@ export default function Footer() {
         </Grid>
         <Grid item xs={12}>
           <Typography sx={{ color: "white", fontSize: "12px", textAlign: "center" }}>
-            Made by Jackson and nobody else :((
+            Made by ???
           </Typography>
         </Grid>
       </Grid>
