@@ -11,7 +11,8 @@ export default function Sidebar() {
   
     const sidebaritems = [
       ['My Profile', '/profile'],
-      ['Mentor Match', '/match'],
+      ['Matching', '/match'],
+      ['Resources', '/resources'],
     ];
 
     const linkprops = {
@@ -35,8 +36,8 @@ export default function Sidebar() {
         >
           <Toolbar />
           <Stack mt={0}>
-            {sidebaritems.map((link) => (
-              <NavLink to={link[1]} 
+            {sidebaritems.map((link, index) => (
+              <NavLink key={index} to={link[1]} 
                  style={linkprops}>{link[0]}</NavLink>
             ))}
           </Stack>

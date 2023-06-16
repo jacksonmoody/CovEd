@@ -7,41 +7,19 @@ import Box from '@mui/material/Box';
 
 
 export default function UserProfile(props) {
-    const currentUser = {
-        email: 'mentor1@example.com',
-        firstName: 'Mentor',
-        lastName: 'One',
-        phone: '123-456-7890',
-        school: 'School 1',
-        pronouns: 'She/Her',
-        subjects: ['Math', 'Science'],
-        timeZone: 'EST',
-        daysAvailable: ['Monday', 'Wednesday'],
-        gradeLevels: ['1st', '2nd'],
-        collegePrep: true,
-        languages: ['English', 'Spanish'],
-        specialAssistance: true,
-        communities: ['Community 1', 'Community 2'],
-        bio: 'Bio for Mentor One',
-        gradeLevel: '12th',
-        image: 'image1.jpg',
-        location: 'New York, NY'
-      }
-    // const currentUser = props.users.filter((user) => (user.uid === props.currentUser.uid))[0];
-
     return (
         <Stack direction='column' mt={4} ml={8} width="100%">
             <Box width="100%" height="140px" sx={{display: 'flex', direction: 'row'}}>
                 <Avatar alt='User Profile' src={props.currentUser.image} sx={{height: '100px', width: '100px'}}/>
                 <Stack spacing={1} ml={2}>
                     <Typography variant='h6'>
-                        {props.currentUser.name}
+                        {props.currentUser.name ?? 'No Name Provided'}
                     </Typography>
                     <Typography variant='p'>
-                        {currentUser.school}
+                        {props.currentUser.school ?? 'No School Provided'}
                     </Typography>
                     <Typography variant='p'>
-                        {currentUser.gradeLevel}
+                        {props.currentUser.gradeLevel ?? 'No Grade Level Provided'}
                     </Typography>
                 </Stack>
             </Box>
@@ -51,43 +29,46 @@ export default function UserProfile(props) {
                         Bio
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        {currentUser.bio}
+                        {props.currentUser.bio ?? "No Bio Provided"}
                     </Typography>
                 </Stack>
             </Box>
             <Box display='flex' direction='row' justifyContent='space-between' width='75%' ml={1} mt={4}>
-                <Grid container spacing={1} xs={4} display='flex' direction='column'>
+                <Grid container item display='flex' direction='column'>
                     <Typography variant='p' fontSize={14}>
                         Subjects
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        {currentUser.subjects.join(', ')}
+                        {props.currentUser.subjects?.join(', ') ?? "No Subjects Provided"}
                     </Typography>
+                    {props.currentUser.type === "Mentor" && 
+                    <>
                     <Typography variant='p' fontSize={14} mt={2}>
                         Grade Levels
                     </Typography>
-                    <Typography variant='p' fontSize={14}>
-                        {currentUser.gradeLevels.join(', ')}
+                     <Typography variant='p' fontSize={14}>
+                        {props.currentUser.gradeLevels?.join(', ') ?? "No Grade Levels Provided"}
                     </Typography>
+                    </>}
                     <Typography variant='p' fontSize={14} mt={2}>
                         {"Language(s)"}
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        {currentUser.languages.join(', ')}
+                        {props.currentUser.languages?.join(', ') ?? "No Languages Provided"}
                     </Typography>
                 </Grid>
-                <Grid item spacing={1} ml={2} xs={4} display='flex' direction='column' mr={2}>
+                <Grid container item ml={2} display='flex' direction='column' mr={2}>
                 <Typography variant='p' fontSize={14}>
-                        {"Location(s)"}
+                        {"Location"}
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        {currentUser.location}
+                        {props.currentUser.location ?? "Unknown Location"}
                     </Typography>
                     <Typography variant='p' fontSize={14} mt={2}>
                         Time Zone
                     </Typography>
                     <Typography variant='p' fontSize={14}>
-                        {currentUser.timeZone}
+                        {props.currentUser.timeZone ?? "Unknown Time Zone"}
                     </Typography>
                     <Typography variant='p' fontSize={14} mt={2}>
                         Email

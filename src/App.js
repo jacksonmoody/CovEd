@@ -21,7 +21,6 @@ export default function App() {
     const [initializingAuth, setInitializingAuth] = useState(true);
     const [initializingDB, setInitializingDB] = useState(true);
     const [userData, setUserData] = useState(null);
-    const [userType, setUserType] = useState(null);
     const [onboarded, setOnboarded] = useState(false);
 
     useEffect(() => {
@@ -44,7 +43,6 @@ export default function App() {
             const data = snapshot.docs.map((doc) => (doc.data()));
             if (data.length !== 0){
                 setUserData(data[0]);
-                setUserType("Mentor");
                 setOnboarded(data[0].onboarded);
             }
             if (initializingDB) setInitializingDB(false);
@@ -54,7 +52,6 @@ export default function App() {
             const data = snapshot.docs.map((doc) => (doc.data()));
             if (data.length !== 0){
                 setUserData(data[0]);
-                setUserType("Mentee");
                 setOnboarded(data[0].onboarded);
             }
             if (initializingDB) setInitializingDB(false);
@@ -69,9 +66,9 @@ export default function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Layout loggedIn={loggedIn} currentUser={userData}/>}>
-                        <Route index element={loggedIn && onboarded ? <UserGrid /> : loggedIn ? <Navigate to="/register/onboarding" /> : <Navigate to="/register/login" />}  />
+                        <Route index element={loggedIn && onboarded ? <UserGrid currentUser={userData}/> : loggedIn ? <Navigate to="/register/onboarding" /> : <Navigate to="/register/login" />}  />
                         <Route path="profile" element={loggedIn && onboarded ? <UserProfile currentUser={userData}/> : loggedIn ? <Navigate to ="register/onboarding"/> :<Navigate to="/register/login" />} />
-                        <Route path="match" element={loggedIn && onboarded ? <UserGrid /> : loggedIn ? <Navigate to="/register/onboarding" /> : <Navigate to="/register/login" />} />
+                        <Route path="match" element={loggedIn && onboarded ? <UserGrid currentUser={userData}/> : loggedIn ? <Navigate to="/register/onboarding" /> : <Navigate to="/register/login" />} />
                     </Route>
                     <Route path="/register" element={<LayoutMinimal loggedIn={loggedIn} />}>
                         <Route index element={!loggedIn ? <Login /> : <Navigate to="/" />} />

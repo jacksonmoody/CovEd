@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { auth } from '../helpers/firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -57,7 +57,7 @@ const Navbar = (props) => {
                 </Typography>
                 <Box style={{ flex: 1 }}>
                     {navitems?.map((link) => (
-                        <a className="link" style={linkprops} href ={link[1]} target="_blank">{link[0]}</a>
+                        <a key ={link[0]} className="link" style={linkprops} href ={link[1]} target="_blank" rel="noreferrer">{link[0]}</a>
                     ))}
                 </Box>
                 <Box>

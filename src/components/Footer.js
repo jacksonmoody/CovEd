@@ -54,13 +54,13 @@ export default function Footer() {
                 </Grid>
                 <Grid item xs={8}>
                         <Box justifyContent='space-between'>
-                            {footeritems.map((link) => (
-                                <a href={link[1]} 
-                                    style={linkprops} target="_blank">{link[0]}</a>
+                            {footeritems.map((link, index) => (
+                                <a key={index} href={link[1]} 
+                                    style={linkprops} target="_blank" rel="noreferrer">{link[0]}</a>
                                 ))}
                         </Box>
                 </Grid>
-                <Grid item spacing={2}>
+                <Grid item>
                     <IconButton aria-label="facebook.com" onClick={() => window.open('https://www.facebook.com/CovEducationInc')}>
                         <FacebookIcon sx={{fontSize:'40px', color: 'white'}}/>
                     </IconButton>
@@ -70,6 +70,11 @@ export default function Footer() {
                     <IconButton aria-label="twitter.com" onClick={() => window.open('https://twitter.com/coveducation')}>
                         <TwitterIcon sx={{fontSize:'40px', color: 'white'}}/>
                     </IconButton>
+                </Grid>
+                <Grid item xs={12}>
+                <Typography sx={{color: 'white', fontSize: '12px', textAlign: 'center'}}>
+                    Made by Jackson and nobody else :((
+                </Typography>
                 </Grid>
             </Grid>
         </ThemeProvider>

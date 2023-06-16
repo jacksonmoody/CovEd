@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signInWithPopup,  } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { addUser } from "./database";
 import { query, collection, where, getDocs } from "firebase/firestore";
@@ -60,8 +60,7 @@ async function registerWithEmailAndPassword(name, email, password, type) {
       await updateProfile(auth.currentUser, { displayName: name })
 
    } catch (err) {
-      err = err.toString();
-      if (err.includes("email-already-in-use")) {
+      if (err.toString().includes("email-already-in-use")) {
          alert("Email already in use. Please try again with a different email.");
       } else {
          alert("Error with registration. Please try again.");
