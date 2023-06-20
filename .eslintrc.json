@@ -20,6 +20,7 @@
         "prettier/prettier": "warn",
         "react/react-in-jsx-scope": "off",
         "react/prop-types": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "no-unused-vars": "warn"
     }
 }

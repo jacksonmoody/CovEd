@@ -102,6 +102,19 @@ export default function UserCard(props) {
     mb: 2
   };
 
+  const acceptedbuttonprops = {
+    backgroundColor: "green",
+    color: "white",
+    borderRadius: 4,
+    width: "170px",
+    height: "40px",
+    mb: 2,
+    "&:hover": {
+      backgroundColor: "green"
+    },
+    pointerEvents: "none"
+  };
+
   return (
     <div className="root">
       <Card sx={cardprops} onClick={handleOpen}>
@@ -147,18 +160,17 @@ export default function UserCard(props) {
             {props.user.type === "Mentor" ? (
               <Button
                 variant="contained"
-                disabled={requested}
+                disabled={requested && !accepted}
                 onClick={handleRequest}
-                sx={requestbuttonprops}>
-                {requested ? "Requested" : "Request"}
+                sx={accepted ? acceptedbuttonprops : requestbuttonprops}>
+                {requested ? (accepted ? "Matched" : "Requested") : "Request"}
               </Button>
             ) : (
               <Button
                 variant="contained"
-                disabled={accepted}
                 onClick={handleRequest}
-                sx={requestbuttonprops}>
-                {accepted ? "Accepted" : "Accept Request"}
+                sx={accepted ? acceptedbuttonprops : requestbuttonprops}>
+                {accepted ? "Matched" : "Accept Request"}
               </Button>
             )}
           </Grid>
