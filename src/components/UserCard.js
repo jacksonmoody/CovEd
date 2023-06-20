@@ -49,14 +49,14 @@ export default function UserCard(props) {
   async function handleRequest() {
     try {
       if (props.currentUser.type === "Mentee") {
-        await setDoc(doc(db, "matches", props.user.uid), {
+        await setDoc(doc(db, "matches", props.currentUser.uid), {
           menteeId: props.currentUser.uid,
           mentorId: props.user.uid,
           accepted: false
         });
         setRequested(true);
       } else if (props.currentUser.type === "Mentor") {
-        const docRef = doc(db, "matches", props.currentUser.uid);
+        const docRef = doc(db, "matches", props.user.uid);
         await updateDoc(docRef, {
           accepted: true
         });
