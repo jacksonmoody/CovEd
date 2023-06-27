@@ -1,6 +1,6 @@
 # CovEd Dashboard
 
-Welcome! This is the repository for the new CovEd dashboard functionality, made by T4SG in Spring 2023. 
+Welcome! This is the repository for the new CovEd dashboard functionality, made by T4SG in Spring/Summer 2023. 
 
 ## Getting Started
 
@@ -10,11 +10,16 @@ Welcome! This is the repository for the new CovEd dashboard functionality, made 
 4. Type `git clone` and then paste the URL copied earlier
 5. Press enter to create a local clone
 6. Use the `cd` command to change into the cloned repository
-7. Run `npm install` to install any necessary dependencies.
+7. Run `npm install` to install the necessary dependencies.
 
 ## Running the Project
 
 ### `npm start`
 
 Runs the app in development mode.\
-Open [http://0.0.0.0:3000](http://0.0.0.0:3000) to view it in your browser.
+Open [http://localhost:3000/](http://localhost:3000/) to view it in your browser.
+
+### `npm build`
+
+Builds the app for production.\
+The current deployment lives at [dashboard.coved.org](https://dashboard.coved.org/).
