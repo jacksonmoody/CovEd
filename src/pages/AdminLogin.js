@@ -10,28 +10,18 @@ import Container from "@mui/material/Container";
 import GoogleIcon from "@mui/icons-material/Google";
 import { Tab, Tabs } from "@mui/material";
 
-function Login() {
+function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [tabIndex, setTabIndex] = useState(0);
-
-  function handleTabChange(e, newValue) {
-    console.log(newValue);
-    setTabIndex(newValue);
-  }
 
   async function submit_normal(e) {
     e.preventDefault();
-    loginWithEmailAndPassword(email, password, tabIndex);
+    loginWithEmailAndPassword(email, password);
   }
 
   async function submit_google(e) {
     e.preventDefault();
-    if (tabIndex === 0) {
-      await registerWithGoogle("Mentee");
-    } else {
-      await registerWithGoogle("Mentor");
-    }
+    await registerWithGoogle("Admin");
   }
 
   return (
@@ -44,8 +34,6 @@ function Login() {
           marginTop: 8
         }}>
         <Tabs
-          value={tabIndex}
-          onChange={handleTabChange}
           variant="fullWidth"
           sx={{ marginTop: 3 }}
           TabIndicatorProps={{
@@ -53,8 +41,7 @@ function Login() {
               backgroundColor: "#F2BE32"
             }
           }}>
-          <Tab label="For Mentees" />
-          <Tab label="For Mentors" />
+          <Tab label="For Admin" />
         </Tabs>
       </Box>
       <Box
@@ -114,4 +101,4 @@ function Login() {
     </Container>
   );
 }
-export default Login;
+export default AdminLogin;
