@@ -38,7 +38,7 @@ export default function App() {
 
     if (currentUser == null) return;
 
-    onSnapshot(
+    const unsub1 = onSnapshot(
       query(collection(db, "mentors"), where("uid", "==", currentUser?.uid)),
       (snapshot) => {
         const data = snapshot.docs.map((doc) => doc.data());
@@ -50,7 +50,7 @@ export default function App() {
       }
     );
 
-    onSnapshot(
+    const unsub2 = onSnapshot(
       query(collection(db, "mentees"), where("uid", "==", currentUser?.uid)),
       (snapshot) => {
         const data = snapshot.docs.map((doc) => doc.data());
@@ -61,7 +61,25 @@ export default function App() {
         if (initializingDB) setInitializingDB(false);
       }
     );
-  });
+
+    const unsub3 = onSnapshot(
+      query(collection(db, "admin"), where("uid", "==", currentUser?.uid)),
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => doc.data());
+        if (data.length !== 0) {
+          setUserData(data[0]);
+          setOnboarded(data[0].onboarded);
+        }
+        if (initializingDB) setInitializingDB(false);
+      }
+    );
+
+    return () => {
+      unsub1();
+      unsub2();
+      unsub3();
+    };
+  }, [currentUser, initializingAuth, initializingDB]);
 
   if (initializingAuth) return null;
   if (loggedIn && initializingDB) return null;
