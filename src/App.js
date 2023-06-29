@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Resources from "./pages/Resources";
 import ErrorPage from "./pages/ErrorPage";
 import { auth, db } from "./helpers/firebase";
 import { query, collection, where, onSnapshot } from "firebase/firestore";
@@ -123,6 +124,9 @@ export default function App() {
                 )
               }
             />
+          </Route>
+          <Route path="/resources" element={<LayoutMinimal />}>
+            <Route path="" element={<Resources />} />
           </Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>

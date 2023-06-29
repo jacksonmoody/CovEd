@@ -41,7 +41,7 @@ const Navbar = (props) => {
 
   const navitems = [
     ["Programs", "https://www.coved.org/programs"],
-    ["Resources", "https://www.coved.org/resources"],
+    ["Resources", "/resources"],
     ["FAQ", "https://www.coved.org/faqs"],
     ["Meet Our Team", "https://www.coved.org/team"],
     ["Contact Us", "https://www.coved.org/contact"],
