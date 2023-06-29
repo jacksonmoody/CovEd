@@ -14,6 +14,7 @@ import UserProfile from "./components/UserProfile";
 import UserGrid from "./components/UserGrid";
 import Onboarding from "./components/Onboarding";
 import AdminLogin from "./pages/AdminLogin";
+import Resources from "./pages/Resources";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -118,6 +119,18 @@ export default function App() {
               element={
                 loggedIn && onboarded ? (
                   <UserGrid currentUser={userData} />
+                ) : loggedIn ? (
+                  <Navigate to="/register/onboarding" />
+                ) : (
+                  <Navigate to="/register/login" />
+                )
+              }
+            />
+            <Route
+              path="resources"
+              element={
+                loggedIn && onboarded ? (
+                  <Resources />
                 ) : loggedIn ? (
                   <Navigate to="/register/onboarding" />
                 ) : (
