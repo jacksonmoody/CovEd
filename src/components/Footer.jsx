@@ -82,11 +82,6 @@ export default function Footer() {
             <TwitterIcon sx={{ fontSize: "40px", color: "white" }} />
           </IconButton>
         </Grid>
-        <Grid item xs={12}>
-          <Typography sx={{ color: "white", fontSize: "12px", textAlign: "center" }}>
-            Made by ???
-          </Typography>
-        </Grid>
       </Grid>
     </ThemeProvider>
   );
