@@ -13,6 +13,7 @@ import { theme } from "./helpers/theme";
 import UserProfile from "./components/UserProfile";
 import UserGrid from "./components/UserGrid";
 import Onboarding from "./components/Onboarding";
+import AdminLogin from "./pages/AdminLogin";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -111,6 +112,7 @@ export default function App() {
             <Route index element={!loggedIn ? <Login /> : <Navigate to="/" />} />
             <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/" />} />
             <Route path="newaccount" element={!loggedIn ? <Register /> : <Navigate to="/" />} />
+            <Route path="admin/login" element={!loggedIn ? <AdminLogin /> : <Navigate to="/" />} />
             <Route
               path="onboarding"
               element={

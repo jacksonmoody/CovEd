@@ -40,7 +40,9 @@ async function registerWithGoogle(type) {
       const q2 = query(collection(db, "mentees"), where("uid", "==", user.uid));
       const docs2 = await getDocs(q2);
       if (docs2.docs.length === 0) {
-        await addUser(user.uid, type, name, "google", email, image);
+        if (type != "Admin") {
+          await addUser(user.uid, type, name, "google", email, image);
+        }
       }
     }
   } catch (err) {
