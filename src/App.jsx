@@ -15,6 +15,7 @@ import UserGrid from "./components/UserGrid";
 import Onboarding from "./components/Onboarding";
 import AdminLogin from "./pages/AdminLogin";
 import Resources from "./pages/Resources";
+import AdminDashboard from "./pages/AdminDashboard";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -91,6 +92,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Layout loggedIn={loggedIn} currentUser={userData} />}>
             <Route
+              path="/admin/dashboard"
+              element={loggedIn ? <AdminDashboard /> : <Navigate to="/register/admin/login" />}
+            />
+            <Route
               index
               element={
                 loggedIn && onboarded ? (
@@ -114,6 +119,7 @@ export default function App() {
                 )
               }
             />
+
             <Route
               path="match"
               element={
@@ -140,10 +146,13 @@ export default function App() {
             />
           </Route>
           <Route path="/register" element={<LayoutMinimal loggedIn={loggedIn} />}>
+            <Route
+              path="admin/login"
+              element={!loggedIn ? <AdminLogin /> : <Navigate to="/admin/dashboard" />}
+            />
             <Route index element={!loggedIn ? <Login /> : <Navigate to="/" />} />
             <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/" />} />
             <Route path="newaccount" element={!loggedIn ? <Register /> : <Navigate to="/" />} />
-            <Route path="admin/login" element={!loggedIn ? <AdminLogin /> : <Navigate to="/" />} />
             <Route
               path="onboarding"
               element={
