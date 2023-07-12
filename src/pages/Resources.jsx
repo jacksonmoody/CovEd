@@ -47,9 +47,34 @@ function Resources() {
             alignItems: "center",
             padding: 2
           }}>
-          <Typography component="h4" align="center">
-            Links
-          </Typography>
+          <ul>
+            <li>
+              <a
+                href="http://bit.ly/coved-service-learning-faq"
+                target="_blank"
+                rel="noopener noreferrer">
+                Service Hours FAQ
+              </a>
+            </li>
+            <li>
+              Service Hours: Fill out{" "}
+              <a href="http://bit.ly/coved-debrief" target="_blank" rel="noopener noreferrer">
+                this form
+              </a>{" "}
+              regularly to keep track of your hours. If you need service hours, feel free to email
+              yeji@coved.org with any questions. We&apos;re here to support you! Email
+              yeji@coved.org at least 3 days before you need it signed off andreach out if you have
+              any questions.
+            </li>
+            <li>
+              <a
+                href="https://docs.google.com/document/d/12mTLuFYoSHbLaSAt9dfYmTo2OQIH-tDf5tbRHhAVI5E/edit"
+                target="_blank"
+                rel="noopener noreferrer">
+                CovEd Mentor Guidelines
+              </a>
+            </li>
+          </ul>
         </Box>
       </Container>
     </Container>
