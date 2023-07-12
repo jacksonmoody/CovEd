@@ -58,7 +58,7 @@ export default function UserCard(props) {
       } else if (props.currentUser.type === "Mentor") {
         const docRef = doc(db, "matches", props.user.uid);
         await updateDoc(docRef, {
-          accepted: "pending-admin"
+          status: "pending-admin"
         });
         setAccepted(true);
       }

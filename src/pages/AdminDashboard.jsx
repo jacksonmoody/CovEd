@@ -56,7 +56,7 @@ const AdminDashboard = () => {
       </TableHead>
       <TableBody>
         {pendingMatches.map((match) => (
-          <TableRow key={match.matchId}>
+          <TableRow key={match.matchId} style={{ position: "relative", bottom: "220px" }}>
             <TableCell>
               {match.mentorName} ({match.mentorEmail})
             </TableCell>
