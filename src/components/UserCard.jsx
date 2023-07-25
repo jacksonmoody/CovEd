@@ -8,8 +8,9 @@ import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc, getDocs } from "firebase/firestore";
 import { db } from "../helpers/firebase";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 
 export default function UserCard(props) {
   const cardprops = {
@@ -46,21 +47,72 @@ export default function UserCard(props) {
   const [requested, setRequested] = React.useState(false);
   const [accepted, setAccepted] = React.useState(false);
 
+  const [status, setStatus] = React.useState("pending-mentor");
+
+  React.useEffect(() => {
+    async function fetchMatchStatus() {
+      try {
+        if (props.currentUser.type === "Mentor") {
+          const matchesRef = collection(db, "matches");
+          const q = query(
+            matchesRef,
+            where("mentorId", "==", props.currentUser.uid),
+            where("menteeId", "==", props.user.uid)
+          );
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.empty) {
+            setStatus("no-action");
+          } else {
+            querySnapshot.forEach((doc) => {
+              setStatus(doc.data().status);
+            });
+          }
+        } else if (props.currentUser.type === "Mentee") {
+          const matchesRef = collection(db, "matches");
+          const q = query(
+            matchesRef,
+            where("mentorId", "==", props.user.uid),
+            where("menteeId", "==", props.currentUser.uid)
+          );
+
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.empty) {
+            setStatus("no-action");
+            console.log("No match found");
+          } else {
+            querySnapshot.forEach((doc) => {
+              console.log(doc.data());
+
+              setStatus(doc.data().status);
+              console.log("Status:", doc.data().status);
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Error fetching match status: ", e);
+      }
+    }
+
+    fetchMatchStatus();
+  }, [props.currentUser.type, props.currentUser.uid, props.user.uid]);
+
   async function handleRequest() {
     try {
       if (props.currentUser.type === "Mentee") {
         await setDoc(doc(db, "matches", props.currentUser.uid), {
           menteeId: props.currentUser.uid,
           mentorId: props.user.uid,
-          accepted: false
+          status: "pending-mentor"
         });
-        setRequested(true);
+        setStatus("pending-mentor");
       } else if (props.currentUser.type === "Mentor") {
         const docRef = doc(db, "matches", props.user.uid);
         await updateDoc(docRef, {
-          accepted: true
+          status: "pending-admin"
         });
-        setAccepted(true);
+        setStatus("pending-admin");
       }
     } catch (e) {
       console.error("Error with document: ", e);
@@ -163,14 +215,18 @@ export default function UserCard(props) {
                 disabled={requested && !accepted}
                 onClick={handleRequest}
                 sx={accepted ? acceptedbuttonprops : requestbuttonprops}>
-                {requested ? (accepted ? "Matched" : "Requested") : "Request"}
+                {status === "pending-mentor" || status === "pending-admin"
+                  ? status == "pending-admin"
+                    ? "Pending Approval"
+                    : "Requested"
+                  : "Request"}
               </Button>
             ) : (
               <Button
                 variant="contained"
                 onClick={handleRequest}
                 sx={accepted ? acceptedbuttonprops : requestbuttonprops}>
-                {accepted ? "Matched" : "Accept Request"}
+                {status === "pending-admin" ? "Pending Approval" : "Accept Request"}
               </Button>
             )}
           </Grid>
