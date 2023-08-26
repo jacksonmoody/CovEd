@@ -1,0 +1,131 @@
+body {
+  overflow-x: hidden;
+}
+
+.navbar {
+  background-color: white !important;
+
+  &__container {
+    flex: 1;
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-around;
+  }
+
+  &__button {
+    width: 140px;
+    height: 40px;
+  }
+
+  &__logo {
+    height: 60px;
+    margin-right: 40px;
+
+    &-mobile {
+      height: 60px;
+      margin-left: 20px;
+    }
+  }
+
+  &__link {
+    color: black;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    position: relative;
+    text-decoration: none;
+
+    &.contrast {
+      color: white;
+      &:visited {
+        color: white;
+      }
+      &:hover {
+        color: white;
+      }
+      &:after {
+        background: white;
+      }
+    }
+
+    &.login {
+      margin-right: 2em;
+    }
+
+    &.sidebar {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      margin-left: 10%;
+      width: 45%;
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 1.5px;
+      display: block;
+      margin-top: 2px;
+      left: 0;
+      background: black;
+      transition: width 0.3s ease;
+      -webkit-transition: width 0.3s ease;
+    }
+
+    &:hover:after {
+      width: 100%;
+      left: 0;
+    }
+
+    &:visited {
+      color: black;
+    }
+  }
+}
+
+.layout {
+  position: relative;
+  min-height: 100vh;
+  background-color: rgb(244, 241, 241);
+}
+
+.footer {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+
+  &__container {
+    align-items: center;
+    background-color: #19568c;
+    display: flex;
+    height: 200px;
+    justify-content: space-around;
+    padding: 3rem;
+
+    @media (max-width: 900px) {
+      flex-direction: column;
+      height: 300px;
+    }
+
+    @media (max-width: 500px) {
+      height: 400px;
+    }
+  }
+
+  &__image {
+    height: 75px;
+  }
+
+  &__links {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    width: 100%;
+
+    @media (max-width: 500px) {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+}

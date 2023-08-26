@@ -1,0 +1,25 @@
+.user__header {
+  align-items: center;
+  background-color: #19568c;
+  display: flex;
+  height: 200px;
+  padding: 4rem;
+
+  &-image {
+    margin: 2rem;
+
+    @media (max-width: 500px) {
+      display: none;
+    }
+  }
+
+  &-text-name {
+    color: white;
+    font-family: "Raleway";
+    font-weight: 500;
+  }
+
+  &-text-subtext {
+    color: white;
+  }
+}
