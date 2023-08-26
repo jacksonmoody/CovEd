@@ -1,94 +1,56 @@
-import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
+import { AppBar, Toolbar, Box, Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { auth } from "../helpers/firebase";
 import { useNavigate } from "react-router-dom";
+import { HEADERS } from "../helpers/constants";
 
 const Navbar = (props) => {
-  const navbarprops = {
-    backgroundColor: "#FFFFFF",
-    color: "primary.main"
-  };
-
-  const covedprops = {
-    fontFamily: "Abhaya Libre",
-    fontWeight: 800,
-    fontSize: "24px"
-  };
-
-  const linkprops = {
-    textDecoration: "none",
-    fontSize: "16px",
-    underline: "none",
-    marginLeft: "40px",
-    marginBottom: "20px",
-    color: "inherit",
-    "&:visited": {
-      color: "inherit"
-    }
-  };
-
-  const registerprops = {
-    backgroundColor: "#F2BE32",
-    color: "white",
-    textTransform: "none",
-    fontSize: "16px",
-    borderRadius: 1,
-    width: "140px",
-    height: "40px",
-    p: 1,
-    ml: 4
-  };
-
-  const navitems = [
-    ["Programs", "https://www.coved.org/programs"],
-    ["Resources", "https://www.coved.org/resources"],
-    ["FAQ", "https://www.coved.org/faqs"],
-    ["Meet Our Team", "https://www.coved.org/team"],
-    ["Contact Us", "https://www.coved.org/contact"],
-    ["Donate", "https://www.coved.org/donate"]
-  ];
-
   const navigate = useNavigate();
 
   function logout() {
-    auth.signOut();
-    navigate("/register/login");
+    try {
+      auth.signOut();
+      navigate("/register/login");
+    } catch {
+      // Error logging out (insufficient permissions)
+    }
   }
 
   return (
-    <AppBar sx={navbarprops} position="static">
+    <AppBar className="navbar" position="static">
       <Toolbar>
-        <Typography variant="h6" sx={covedprops}>
-          CovEd
-        </Typography>
-        <Box style={{ flex: 1 }}>
-          {navitems?.map((link) => (
+        <a href="https://www.coved.org" target="_blank" rel="noreferrer">
+          <img className="navbar__logo" src="/static/coved_logo.png" alt="CovEd Logo" />
+        </a>
+        <Box className="navbar__container">
+          {HEADERS?.map((link) => (
             <a
               key={link[0]}
-              className="link"
-              style={linkprops}
+              className="navbar__link"
               href={link[1]}
               target="_blank"
               rel="noreferrer">
               {link[0]}
             </a>
           ))}
+          {!props.loggedIn && (
+            <NavLink className="navbar__link login" to="/register/login">
+              Login
+            </NavLink>
+          )}
         </Box>
         <Box>
           {!props.loggedIn ? (
             <>
-              <NavLink style={linkprops} to="/register/login">
-                Login
-              </NavLink>
               <Button
                 onClick={() => navigate("/register/newaccount")}
                 variant="contained"
-                sx={registerprops}>
+                className="navbar__button">
                 Sign Up
               </Button>
             </>
           ) : (
-            <Button onClick={logout} variant="contained" sx={registerprops}>
+            <Button onClick={logout} variant="contained" className="navbar__button">
               Log Out
             </Button>
           )}
