@@ -241,7 +241,7 @@ export default function UserCard(props) {
                 variant="contained"
                 onClick={handleRequest}
                 sx={accepted ? acceptedbuttonprops : requestbuttonprops}>
-                {status === "pending-admin" ? "Pending Approval" : "Accept Request"}
+                {status === "pending-admin" ? "Pending" : "Accept"}
               </Button>
             )}
           </Grid>

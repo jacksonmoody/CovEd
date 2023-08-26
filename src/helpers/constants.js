@@ -26,7 +26,7 @@ export const SUBJECTS = [
   "AP Biology",
   "AP Chemistry",
   "AP Calculus AB",
-  "AB Calculus BC",
+  "AP Calculus BC",
   "AP Statistics",
   "AP English Language",
   "AP English Literature",
