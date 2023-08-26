@@ -1,56 +1,22 @@
 import React from "react";
-import { ThemeProvider } from "@emotion/react";
-import { theme } from "../helpers/theme";
-import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
+import "../styling/User.scss";
 
 export default function UserHeader(props) {
-  const headerprops = {
-    backgroundColor: "primary.main",
-    height: "200px",
-    display: "flex",
-    alignItems: "center",
-    padding: 4,
-    paddingLeft: 10
-  };
-
-  const profilepicprops = {
-    height: "120px",
-    width: "120px",
-    m: 2
-  };
-
-  const nameprops = {
-    color: "primary.contrastText",
-    fontFamily: "Abhaya Libre",
-    fontWeight: 350,
-    m: 2
-  };
-
-  const subtextprops = {
-    color: "primary.contrastText",
-    ml: 2,
-    mb: 2
-  };
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container sx={headerprops}>
-        <Grid item>
-          <Avatar alt="Username" src={props.currentUser?.image} sx={profilepicprops} />
-        </Grid>
-        <Grid item>
-          <Stack>
-            <Typography variant="h3" sx={nameprops}>
-              {props.currentUser?.name}
-            </Typography>
-            <Typography variant="h5" sx={subtextprops}>
-              {props.currentUser?.type} Dashboard
-            </Typography>
-          </Stack>
-        </Grid>
-      </Grid>
-    </ThemeProvider>
+    <div className="user__header">
+      <div className="user__header-image">
+        <Avatar alt="Username" src={props.currentUser?.image} sx={{ width: 120, height: 120 }} />
+      </div>
+      <div className="user__header-text">
+        <Typography variant="h3" className="user__header-text-name">
+          {props.currentUser?.displayName}
+        </Typography>
+        <Typography variant="h5" className="user__header-text-subtext">
+          {props.currentUser?.type} Dashboard
+        </Typography>
+      </div>
+    </div>
   );
 }
