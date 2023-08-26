@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { loginWithEmailAndPassword, registerWithGoogle } from "../helpers/firebase";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -34,6 +33,7 @@ function AdminLogin() {
           marginTop: 8
         }}>
         <Tabs
+          value={0}
           variant="fullWidth"
           sx={{ marginTop: 3 }}
           TabIndicatorProps={{
@@ -54,7 +54,7 @@ function AdminLogin() {
           bgcolor: "white",
           borderRadius: "0 0 10% 10%"
         }}>
-        <Typography component="h2" variant="h4">
+        <Typography component="h2" variant="h4" sx={{ textAlign: "center", fontWeight: "bold" }}>
           Welcome to CovEd!
         </Typography>
         <Typography component="h1" variant="h6">
@@ -96,7 +96,6 @@ function AdminLogin() {
           startIcon={<GoogleIcon />}>
           Sign In With Google
         </Button>
-        <Link to="/register/newaccount">Don&#39;t have an account? Sign Up</Link>
       </Box>
     </Container>
   );
