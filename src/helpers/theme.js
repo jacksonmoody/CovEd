@@ -13,6 +13,7 @@ export const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: '"Raleway", "Montserrat", sans-serif'
+    fontFamily: `"Montserrat", "Arial", sans-serif`,
+    fontWeight: 400
   }
 });

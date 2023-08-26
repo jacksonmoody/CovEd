@@ -5,24 +5,10 @@ import { Toolbar } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import { SECONDARIES } from "../helpers/constants";
 
 export default function Sidebar() {
   const drawerWidth = 240;
-
-  const sidebaritems = [
-    ["My Profile", "/profile"],
-    ["Matching", "/match"],
-    ["Resources", "/resources"]
-  ];
-
-  const linkprops = {
-    color: "black",
-    textDecoration: "none",
-    fontSize: "1.25rem",
-    underline: "none",
-    marginLeft: "50px",
-    marginBottom: "20px"
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -35,8 +21,8 @@ export default function Sidebar() {
         }}>
         <Toolbar />
         <Stack mt={0}>
-          {sidebaritems.map((link, index) => (
-            <NavLink key={index} to={link[1]} style={linkprops}>
+          {SECONDARIES.map((link, index) => (
+            <NavLink key={index} to={link[1]} className="navbar__link sidebar">
               {link[0]}
             </NavLink>
           ))}

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import ErrorPage from "./pages/ErrorPage";
 import { auth, db } from "./helpers/firebase";
 import { query, collection, where, onSnapshot } from "firebase/firestore";
@@ -24,10 +25,11 @@ export default function App() {
   const [initializingDB, setInitializingDB] = useState(true);
   const [userData, setUserData] = useState(null);
   const [onboarded, setOnboarded] = useState(false);
+  const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user && user.emailVerified) {
         setLoggedIn(true);
         setcurrentUser(user);
         if (initializingAuth) setInitializingAuth(false);
@@ -38,41 +40,54 @@ export default function App() {
       }
     });
 
-    if (currentUser == null) return;
+    if (!currentUser) return;
 
     const unsub1 = onSnapshot(
       query(collection(db, "mentors"), where("uid", "==", currentUser?.uid)),
       (snapshot) => {
-        const data = snapshot.docs.map((doc) => doc.data());
-        if (data.length !== 0) {
-          setUserData(data[0]);
-          setOnboarded(data[0].onboarded);
+        try {
+          const data = snapshot.docs.map((doc) => doc.data());
+          if (data.length !== 0) {
+            setUserData(data[0]);
+            setOnboarded(data[0].onboarded);
+          }
+          if (initializingDB) setInitializingDB(false);
+        } catch (error) {
+          /*Error fetching data*/
         }
-        if (initializingDB) setInitializingDB(false);
       }
     );
 
     const unsub2 = onSnapshot(
       query(collection(db, "mentees"), where("uid", "==", currentUser?.uid)),
       (snapshot) => {
-        const data = snapshot.docs.map((doc) => doc.data());
-        if (data.length !== 0) {
-          setUserData(data[0]);
-          setOnboarded(data[0].onboarded);
+        try {
+          const data = snapshot.docs.map((doc) => doc.data());
+          if (data.length !== 0) {
+            setUserData(data[0]);
+            setOnboarded(data[0].onboarded);
+          }
+          if (initializingDB) setInitializingDB(false);
+        } catch (error) {
+          /*Error fetching data*/
         }
-        if (initializingDB) setInitializingDB(false);
       }
     );
 
     const unsub3 = onSnapshot(
       query(collection(db, "admin"), where("uid", "==", currentUser?.uid)),
       (snapshot) => {
-        const data = snapshot.docs.map((doc) => doc.data());
-        if (data.length !== 0) {
-          setUserData(data[0]);
-          setOnboarded(data[0].onboarded);
+        try {
+          const data = snapshot.docs.map((doc) => doc.data());
+          if (data.length !== 0) {
+            setUserData(data[0]);
+            setOnboarded(data[0].onboarded);
+            setAdmin(true);
+          }
+          if (initializingDB) setInitializingDB(false);
+        } catch (error) {
+          /*Error fetching data*/
         }
-        if (initializingDB) setInitializingDB(false);
       }
     );
 
@@ -93,7 +108,7 @@ export default function App() {
           <Route path="/" element={<Layout loggedIn={loggedIn} currentUser={userData} />}>
             <Route
               path="/admin/dashboard"
-              element={loggedIn ? <AdminDashboard /> : <Navigate to="/register/admin/login" />}
+              element={loggedIn && admin ? <AdminDashboard /> : <Navigate to="/register/login" />}
             />
             <Route
               index
@@ -153,6 +168,10 @@ export default function App() {
             <Route index element={!loggedIn ? <Login /> : <Navigate to="/" />} />
             <Route path="login" element={!loggedIn ? <Login /> : <Navigate to="/" />} />
             <Route path="newaccount" element={!loggedIn ? <Register /> : <Navigate to="/" />} />
+            <Route
+              path="forgotpassword"
+              element={!loggedIn ? <ForgotPassword /> : <Navigate to="/" />}
+            />
             <Route
               path="onboarding"
               element={
