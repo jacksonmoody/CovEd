@@ -8,11 +8,16 @@ import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { doc, setDoc, updateDoc, getDocs } from "firebase/firestore";
-import { db } from "../helpers/firebase";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db, sendEmail } from "../helpers/firebase";
+import { collection, query, where } from "firebase/firestore";
 
 export default function UserCard(props) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const cardprops = {
     width: "260px",
     height: "300px",
@@ -27,7 +32,7 @@ export default function UserCard(props) {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "620px",
+    maxWidth: "700px",
     height: "528px",
     backgroundColor: "white",
     borderRadius: 4,
@@ -35,13 +40,6 @@ export default function UserCard(props) {
     p: 6,
     display: "flex"
   };
-
-  const cardinfo = [
-    props.user.name,
-    props.user.timezone,
-    props.user.subjects?.join(", "),
-    props.user.gradeLevels?.join(", ")
-  ];
 
   const [open, setOpen] = React.useState(false);
   const [requested, setRequested] = React.useState(false);
@@ -80,13 +78,9 @@ export default function UserCard(props) {
 
           if (querySnapshot.empty) {
             setStatus("no-action");
-            console.log("No match found");
           } else {
             querySnapshot.forEach((doc) => {
-              console.log(doc.data());
-
               setStatus(doc.data().status);
-              console.log("Status:", doc.data().status);
             });
           }
         }
@@ -107,12 +101,24 @@ export default function UserCard(props) {
           status: "pending-mentor"
         });
         setStatus("pending-mentor");
+        await sendEmail(
+          props.user.email,
+          "New Mentor Request",
+          "Hey " +
+            props.user.displayName +
+            '! <br/><br/> A new mentee has requested you. <a href="https://dashboard.coved.org">Login to your dashboard now</a> to accept or reject the request. <br/><br/> If you have any questions, please reach out to our team at <a href="mailto:support@coved.org">support@coved.org</a>. <br/><br/> Kind regards, <br/> The CovEd Team'
+        );
       } else if (props.currentUser.type === "Mentor") {
         const docRef = doc(db, "matches", props.user.uid);
         await updateDoc(docRef, {
           status: "pending-admin"
         });
         setStatus("pending-admin");
+        await sendEmail(
+          "support@coved.org",
+          "Match Approval Required",
+          "Hey CovEd Mentoring Team! <br/><br/> A new mentor/mentee match is ready for approval. <a href='https://dashboard.coved.org/register/admin/login'>Login to your dashboard now</a> to accept or reject the request. <br/><br/> If you run into any issues, please reach out to the tech team at <a href='mailto:tech@coved.org'>tech@coved.org</a>. <br/><br/> Kind regards, <br/> The CovEd Team"
+        );
       }
     } catch (e) {
       console.error("Error with document: ", e);
@@ -149,7 +155,6 @@ export default function UserCard(props) {
     backgroundColor: "primary.main",
     color: "white",
     borderRadius: 4,
-    width: "170px",
     height: "40px",
     mb: 2
   };
@@ -158,7 +163,6 @@ export default function UserCard(props) {
     backgroundColor: "green",
     color: "white",
     borderRadius: 4,
-    width: "170px",
     height: "40px",
     mb: 2,
     "&:hover": {
@@ -170,20 +174,23 @@ export default function UserCard(props) {
   return (
     <div className="root">
       <Card sx={cardprops} onClick={handleOpen}>
-        <Stack spacing={1} sx={{ display: "flex", justifyContent: "center" }}>
+        <Stack spacing={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           <Avatar
             alt="User Profile"
             src={props.user.image}
             sx={{ height: "140px", width: "140px" }}
           />
-          {cardinfo.map((text, index) => (
-            <Typography
-              key={index}
-              variant={index === 0 ? "h6" : "p"}
-              sx={{ padding: 0, margin: 2, textAlign: "center" }}>
-              {text}
-            </Typography>
-          ))}
+          <Typography variant="h6" sx={{ padding: 0, margin: 2, textAlign: "center" }}>
+            {props.user.displayName ? props.user.displayName : "No Name Provided"}
+          </Typography>
+          <Typography variant="p" sx={{ padding: 0, margin: 2, textAlign: "center" }}>
+            {props.user.subjects.length > 0
+              ? props.user.subjects.join(", ")
+              : "No Subjects Provided"}
+          </Typography>
+          <Typography variant="p" sx={{ padding: 0, margin: 2, textAlign: "center" }}>
+            {props.user.school ? props.user.school : "No School Provided"}
+          </Typography>
         </Stack>
       </Card>
       <Modal
@@ -193,16 +200,24 @@ export default function UserCard(props) {
         aria-describedby="modal-modal-description">
         <Grid container sx={modalprops}>
           <Grid item xs={9} sx={{ display: "flex", mt: 2 }}>
-            <Avatar
-              alt="User Profile"
-              src={props.user.image}
-              sx={{ height: "100px", width: "100px" }}
-            />
-            <Stack spacing={1} ml={2}>
-              <Typography variant="h6">{props.user.name ?? "No Name Provided"}</Typography>
-              <Typography variant="p">{props.user.school ?? "No School Provided"}</Typography>
+            {!isMobile && (
+              <Avatar
+                alt="User Profile"
+                src={props.user.image}
+                sx={{ height: "100px", width: "100px", marginRight: 2 }}
+              />
+            )}
+            <Stack spacing={1}>
+              <Typography variant="h6">
+                {props.user.displayName ? props.user.displayName : "No Name Provided"}
+              </Typography>
               <Typography variant="p">
-                {props.user.gradeLevel ?? "No Grade Level Provided"}
+                {props.user.school ? props.user.school : "No School Provided"}
+              </Typography>
+              <Typography variant="p">
+                {props.user.gradeLevel >= 0
+                  ? "Grade " + props.user.gradeLevel
+                  : "No Grade Level Provided"}
               </Typography>
             </Stack>
           </Grid>
@@ -232,57 +247,69 @@ export default function UserCard(props) {
           </Grid>
           <Grid item xs={12} mr={2}>
             <Stack spacing={1}>
-              <Typography variant="p" fontSize={14}>
+              <Typography variant="p" fontSize={14} sx={{ fontWeight: "bold" }}>
                 Bio
               </Typography>
               <Typography variant="p" fontSize={14}>
-                {props.user.bio ?? "No Bio Provided"}
+                {props.user.bio ? props.user.bio : "No Bio Provided"}
               </Typography>
             </Stack>
           </Grid>
           <Grid container display="flex" justifyContent="space-between" width="100%">
             <Grid container item xs={4} display="flex" direction="column">
-              <Typography variant="p" fontSize={14}>
+              <Typography variant="p" fontSize={14} sx={{ fontWeight: "bold" }}>
                 Subjects
               </Typography>
               <Typography variant="p" fontSize={14}>
-                {props.user.subjects?.join(", ") ?? "No Subjects Provided"}
+                {props.user.subjects.length > 0
+                  ? props.user.subjects.join(", ")
+                  : "No Subjects Provided"}
               </Typography>
-              {props.user.type === "mentor" && (
+              {props.user.type === "Mentor" && (
                 <>
-                  <Typography variant="p" fontSize={14} mt={1}>
+                  <Typography variant="p" fontSize={14} mt={1} sx={{ fontWeight: "bold" }}>
                     Grade Levels
                   </Typography>
                   <Typography variant="p" fontSize={14}>
-                    {props.user.gradeLevels?.join(", ") ?? "No Grade Levels Provided"}
+                    {props.user.gradeLevels.length > 0
+                      ? props.user.gradeLevels.join(", ")
+                      : "No Grade Levels Provided"}
                   </Typography>
                 </>
               )}
-              <Typography variant="p" fontSize={14} mt={1}>
+              <Typography variant="p" fontSize={14} mt={1} sx={{ fontWeight: "bold" }}>
                 {"Language(s)"}
               </Typography>
               <Typography variant="p" fontSize={14}>
-                {props.user.languages?.join(", ") ?? "No Languages Provided"}
+                {props.user.languages.length > 0
+                  ? props.user.languages.join(", ")
+                  : "No Languages Provided"}
               </Typography>
             </Grid>
-            <Grid container item ml={2} xs={4} display="flex" direction="column" mr={2}>
-              <Typography variant="p" fontSize={14}>
+            <Grid
+              container
+              item
+              xs={4}
+              display="flex"
+              direction="column"
+              sx={{ alignContent: "flex-end", textAlign: "right" }}>
+              <Typography variant="p" fontSize={14} sx={{ fontWeight: "bold" }}>
                 Location
               </Typography>
               <Typography variant="p" fontSize={14}>
-                {props.user.location ?? "No Location Provided"}
+                {props.user.location ? props.user.location : "No Location Provided"}
               </Typography>
-              <Typography variant="p" fontSize={14} mt={1}>
+              <Typography variant="p" fontSize={14} mt={1} sx={{ fontWeight: "bold" }}>
                 Time Zone
               </Typography>
               <Typography variant="p" fontSize={14}>
-                {props.user.timeZone ?? "No Time Zone Provided"}
+                {props.user.timeZone ? props.user.timeZone : "No Time Zone Provided"}
               </Typography>
-              <Typography variant="p" fontSize={14} mt={1}>
+              <Typography variant="p" fontSize={14} mt={1} sx={{ fontWeight: "bold" }}>
                 Email
               </Typography>
               <Typography variant="p" fontSize={14}>
-                {props.user.email ?? "No Email Provided"}
+                {props.user.email ? props.user.email : "No Email Provided"}
               </Typography>
             </Grid>
           </Grid>
