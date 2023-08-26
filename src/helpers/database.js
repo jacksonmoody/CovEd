@@ -1,40 +1,79 @@
 import { db } from "./firebase";
-import { setDoc, doc, deleteDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 
-export async function addUser(uid, type, name, authProvider, email, image = "", onboarded = false) {
+async function setDocument(collection, uid, data) {
+  await setDoc(doc(db, collection, uid), data);
+}
+
+export async function addUser(
+  uid,
+  type,
+  name,
+  authProvider,
+  email,
+  image = "",
+  onboarded = false,
+  partnership = false,
+  bio = "",
+  school = "",
+  subjects = [],
+  languages = [],
+  location = "",
+  timeZone = "",
+  academicYear = "",
+  gradeLevel = -1,
+  gradeLevels = [],
+  startDate = "",
+  endDate = "",
+  days = [],
+  startTime = "",
+  endTime = "",
+  specialNeeds = [],
+  hours = 0,
+  createdAt = Date.now()
+) {
+  const data = {
+    uid: uid,
+    type: type,
+    displayName: name,
+    authProvider: authProvider,
+    onboarded: onboarded,
+    email: email,
+    image: image,
+    partnership: partnership,
+    bio: bio,
+    school: school,
+    subjects: subjects,
+    languages: languages,
+    location: location,
+    timeZone: timeZone,
+    academicYear: academicYear,
+    gradeLevel: gradeLevel,
+    gradeLevels: gradeLevels,
+    startDate: startDate,
+    endDate: endDate,
+    days: days,
+    startTime: startTime,
+    endTime: endTime,
+    specialNeeds: specialNeeds,
+    hours: hours,
+    createdAt: createdAt
+  };
   if (type === "Mentee") {
-    await setDoc(doc(db, "mentees", uid), {
-      uid: uid,
-      type: type,
-      name: name,
-      authProvider: authProvider,
-      onboarded: onboarded,
-      email: email,
-      image: image
-    });
+    await setDocument("mentees", uid, data);
   } else if (type === "Mentor") {
-    await setDoc(doc(db, "mentors", uid), {
-      uid: uid,
-      type: type,
-      name: name,
-      authProvider: authProvider,
-      onboarded: onboarded,
-      email: email,
-      image: image
-    });
+    await setDocument("mentors", uid, data);
   } else if (type === "Admin") {
-    await setDoc(doc(db, "admin", uid), {
-      uid: uid,
-      type: type,
-      name: name,
-      authProvider: authProvider,
-      onboarded: onboarded,
-      email: email,
-      image: image
-    });
+    await setDocument("admin", uid, data);
   }
 }
 
-export async function deleteUser(user) {
-  await deleteDoc(doc(db, "users", user.uid));
+export async function updateUser(uid, type, data) {
+  if (type === "Mentee") {
+    await updateDoc(doc(db, "mentees", uid), data);
+  } else if (type === "Mentor") {
+    await updateDoc(doc(db, "mentors", uid), data);
+  } else if (type === "Admin") {
+    await updateDoc(doc(db, "admin", uid), data);
+  }
 }

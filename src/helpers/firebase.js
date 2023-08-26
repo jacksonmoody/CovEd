@@ -5,15 +5,16 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
-  signInWithPopup
+  signInWithPopup,
+  sendEmailVerification,
+  sendPasswordResetEmail
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
 import { addUser } from "./database";
-import { query, collection, where, getDocs } from "firebase/firestore";
+import { getFirestore, query, collection, where, addDoc, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBT22aMNrMQTT7sOGb3NdRNppP80BQzqgs",
-  authDomain: "cov-education.firebaseapp.com",
+  authDomain: "api.coved.org",
   projectId: "cov-education",
   storageBucket: "cov-education.appspot.com",
   messagingSenderId: "181471038447",
@@ -45,18 +46,22 @@ async function registerWithGoogle(type) {
         }
       }
     }
+    return "Success";
   } catch (err) {
-    alert("Error with Google authentication. Please try again.");
-    console.error(err);
+    return "Error with Google authentication. Please try again.";
   }
 }
 
 async function loginWithEmailAndPassword(email, password) {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const res = await signInWithEmailAndPassword(auth, email, password);
+    const user = res.user;
+    if (!user.emailVerified) {
+      return "Unverified email. Please verify your email and try again.";
+    }
+    return "Success";
   } catch (err) {
-    alert("Error with login. Please try again.");
-    console.error(err);
+    return "Invalid email/password. Please try again";
   }
 }
 
@@ -64,16 +69,58 @@ async function registerWithEmailAndPassword(name, email, password, type) {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
-    await addUser(user.uid, type, name, "local", email);
-    await updateProfile(auth.currentUser, { displayName: name });
+    if (user.emailVerified) {
+      await addUser(user.uid, type, name, "local", email);
+      await updateProfile(auth.currentUser, { displayName: name });
+    } else {
+      await sendEmailVerification(auth.currentUser);
+      await updateProfile(auth.currentUser, { displayName: name });
+      await addUser(user.uid, type, name, "local", email);
+    }
+    return "Success";
   } catch (err) {
     if (err.toString().includes("email-already-in-use")) {
-      alert("Email already in use. Please try again with a different email.");
+      return "Email already in use. Please login instead.";
     } else {
-      alert("Error with registration. Please try again.");
+      return "Error with registration. Please try again with a different email/password.";
     }
-    console.error(err.toString());
   }
 }
 
-export { auth, db, registerWithGoogle, loginWithEmailAndPassword, registerWithEmailAndPassword };
+async function resetPassword(email) {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return "Success! Check your email for next steps.";
+  } catch (err) {
+    if (err.toString().includes("user-not-found")) {
+      return "Email not found. Please try registering a new account with that email.";
+    } else {
+      return "Error resetting password. Please try again.";
+    }
+  }
+}
+
+async function sendEmail(to, subject, body) {
+  try {
+    await addDoc(collection(db, "mail"), {
+      to: to,
+      replyTo: "support@coved.org",
+      message: {
+        subject: subject,
+        html: body
+      }
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export {
+  auth,
+  db,
+  registerWithGoogle,
+  loginWithEmailAndPassword,
+  registerWithEmailAndPassword,
+  resetPassword,
+  sendEmail
+};
