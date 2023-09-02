@@ -17,6 +17,8 @@ import Onboarding from "./components/Onboarding";
 import AdminLogin from "./pages/AdminLogin";
 import Resources from "./pages/Resources";
 import AdminDashboard from "./pages/AdminDashboard";
+import Hours from "./pages/Hours";
+import VerifyHours from "./pages/VerifyHours";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -113,8 +115,10 @@ export default function App() {
             <Route
               index
               element={
-                loggedIn && onboarded ? (
+                loggedIn && onboarded && !admin ? (
                   <UserGrid currentUser={userData} />
+                ) : loggedIn && onboarded && admin ? (
+                  <AdminDashboard />
                 ) : loggedIn ? (
                   <Navigate to="/register/onboarding" />
                 ) : (
@@ -138,8 +142,26 @@ export default function App() {
             <Route
               path="match"
               element={
-                loggedIn && onboarded ? (
+                loggedIn && onboarded && !admin ? (
                   <UserGrid currentUser={userData} />
+                ) : loggedIn && onboarded && admin ? (
+                  <AdminDashboard />
+                ) : loggedIn ? (
+                  <Navigate to="/register/onboarding" />
+                ) : (
+                  <Navigate to="/register/login" />
+                )
+              }
+            />
+            <Route
+              path="hours"
+              element={
+                loggedIn && onboarded ? (
+                  userData.type === "Mentor" ? (
+                    <Hours currentUser={userData} />
+                  ) : (
+                    <VerifyHours currentUser={userData} />
+                  )
                 ) : loggedIn ? (
                   <Navigate to="/register/onboarding" />
                 ) : (

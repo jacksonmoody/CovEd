@@ -31,23 +31,23 @@ export default function MentorGrid(props) {
         console.error("Error:", error);
       }
     }
-
-    const unsub1 = onSnapshot(query(collection(db, "matches")), (snapshot) => {
-      const requests = snapshot.docs.map((doc) => doc.data());
-      setRequests(requests);
-    });
+    let unsub1 = () => {};
     let unsub2 = () => {};
     if (props.currentUser.type === "Mentor") {
-      if (requests) {
-        const menteeIds = requests
-          .filter((request) => request.mentorId === props.currentUser.uid)
-          .map((request) => request.menteeId);
-        unsub2 = onSnapshot(query(collection(db, "mentees")), (snapshot) => {
-          const data = snapshot.docs.map((doc) => doc.data());
-          const filteredData = data.filter((mentee) => menteeIds.includes(mentee.uid));
-          setData(filteredData);
-        });
-      }
+      unsub1 = onSnapshot(query(collection(db, "matches")), (snapshot) => {
+        const newRequests = snapshot.docs.map((doc) => doc.data());
+        setRequests(newRequests);
+        if (newRequests) {
+          const menteeIds = newRequests
+            .filter((request) => request.mentorId === props.currentUser.uid)
+            .map((request) => request.menteeId);
+          unsub2 = onSnapshot(query(collection(db, "mentees")), (snapshot) => {
+            const data = snapshot.docs.map((doc) => doc.data());
+            const filteredData = data.filter((mentee) => menteeIds.includes(mentee.uid));
+            setData(filteredData);
+          });
+        }
+      });
     } else if (props.currentUser.type === "Mentee") {
       unsub2 = onSnapshot(query(collection(db, "mentors")), (snapshot) => {
         const params = {

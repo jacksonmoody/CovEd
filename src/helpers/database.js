@@ -29,7 +29,6 @@ export async function addUser(
   startTime = "",
   endTime = "",
   specialNeeds = [],
-  hours = 0,
   createdAt = Date.now()
 ) {
   const data = {
@@ -56,7 +55,6 @@ export async function addUser(
     startTime: startTime,
     endTime: endTime,
     specialNeeds: specialNeeds,
-    hours: hours,
     createdAt: createdAt
   };
   if (type === "Mentee") {
@@ -76,4 +74,24 @@ export async function updateUser(uid, type, data) {
   } else if (type === "Admin") {
     await updateDoc(doc(db, "admin", uid), data);
   }
+}
+
+export async function addHours(uid, menteeId, type, hours, description = "", attachment = "") {
+  await setDocument("hours", uid + Date.now(), {
+    id: uid + Date.now(),
+    uid: uid,
+    menteeId: menteeId,
+    type: type,
+    hours: hours,
+    description: description,
+    attachment: attachment,
+    status: "Pending",
+    createdAt: Date.now()
+  });
+}
+
+export async function updateHours(id, status) {
+  await updateDoc(doc(db, "hours", id), {
+    status: status
+  });
 }
