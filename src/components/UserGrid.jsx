@@ -10,10 +10,28 @@ import { db } from "../helpers/firebase";
 import { collection, onSnapshot, query } from "firebase/firestore";
 
 export default function MentorGrid(props) {
+  const [filters, setFilters] = useState(null);
   const [data, setData] = useState(null);
   const [requests, setRequests] = useState(null);
 
   useEffect(() => {
+    async function getMatches(data) {
+      try {
+        const response = await fetch("https://match-v5pvmo3fca-uc.a.run.app", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        setFilters(result);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+
     const unsub1 = onSnapshot(query(collection(db, "matches")), (snapshot) => {
       const requests = snapshot.docs.map((doc) => doc.data());
       setRequests(requests);
@@ -32,15 +50,21 @@ export default function MentorGrid(props) {
       }
     } else if (props.currentUser.type === "Mentee") {
       unsub2 = onSnapshot(query(collection(db, "mentors")), (snapshot) => {
+        const params = {
+          uid: props.currentUser.uid,
+          type: "Mentee"
+        };
+        getMatches(params);
         const data = snapshot.docs.map((doc) => doc.data());
-        setData(data);
+        const filteredData = data.filter((mentor) => filters.includes(mentor.uid));
+        setData(filteredData);
       });
     }
     return () => {
       unsub1();
       unsub2();
     };
-  }, [props.currentUser, requests]);
+  }, [props.currentUser]);
 
   const gridprops = {
     display: "flex",
@@ -77,6 +101,7 @@ export default function MentorGrid(props) {
           Loading your matches...
         </Typography>
         <CircularProgress />
+        <br />
       </Container>
     );
   } else {
