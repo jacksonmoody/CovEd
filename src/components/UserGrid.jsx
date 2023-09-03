@@ -3,6 +3,7 @@ import UserCard from "./UserCard";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useState, useEffect } from "react";
@@ -10,23 +11,24 @@ import { db } from "../helpers/firebase";
 import { collection, onSnapshot, query } from "firebase/firestore";
 
 export default function MentorGrid(props) {
-  const [filters, setFilters] = useState(null);
   const [data, setData] = useState(null);
   const [requests, setRequests] = useState(null);
 
   useEffect(() => {
-    async function getMatches(data) {
+    async function getMatches(params, snapshot) {
       try {
         const response = await fetch("https://match-v5pvmo3fca-uc.a.run.app", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(params)
         });
 
         const result = await response.json();
-        setFilters(result);
+        const data = snapshot.docs.map((doc) => doc.data());
+        const filteredData = data.filter((mentor) => result.includes(mentor.uid));
+        setData(filteredData);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -54,10 +56,7 @@ export default function MentorGrid(props) {
           uid: props.currentUser.uid,
           type: "Mentee"
         };
-        getMatches(params);
-        const data = snapshot.docs.map((doc) => doc.data());
-        const filteredData = data.filter((mentor) => filters.includes(mentor.uid));
-        setData(filteredData);
+        getMatches(params, snapshot);
       });
     }
     return () => {
@@ -69,20 +68,29 @@ export default function MentorGrid(props) {
   const gridprops = {
     display: "flex",
     flexDirection: "row",
-    mt: 2,
     mb: 2,
     overflowY: "scroll"
   };
 
   if (data?.length > 0) {
     return (
-      <Grid container justifyContent="center" spacing={2} sx={gridprops}>
-        {data?.map((user, id) => (
-          <Grid item key={id}>
-            <UserCard user={user} requests={requests} currentUser={props.currentUser} />
-          </Grid>
-        ))}
-      </Grid>
+      <Stack sx={{ width: "100%" }}>
+        <Typography
+          component="h5"
+          variant="h5"
+          sx={{ textAlign: "center", marginTop: 5, marginBottom: 5 }}>
+          {props.currentUser.type === "Mentee"
+            ? "Congratulations! You have matched with the following mentors:"
+            : "The following mentees have requested mentorship:"}
+        </Typography>
+        <Grid container justifyContent="center" spacing={2} sx={gridprops}>
+          {data?.map((user, id) => (
+            <Grid item key={id}>
+              <UserCard user={user} requests={requests} currentUser={props.currentUser} />
+            </Grid>
+          ))}
+        </Grid>
+      </Stack>
     );
   } else if (!data) {
     return (
