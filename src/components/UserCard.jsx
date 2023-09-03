@@ -232,7 +232,7 @@ export default function UserCard(props) {
                 sx={accepted ? acceptedbuttonprops : requestbuttonprops}>
                 {status === "pending-mentor" || status === "pending-admin"
                   ? status == "pending-admin"
-                    ? "Pending Approval"
+                    ? "Pending"
                     : "Requested"
                   : "Request"}
               </Button>

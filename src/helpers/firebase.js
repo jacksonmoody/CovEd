@@ -54,7 +54,7 @@ async function registerWithGoogle(type) {
 
 async function loginWithEmailAndPassword(email, password) {
   try {
-    const res = await signInWithEmailAndPassword(auth, email, password);
+    const res = await signInWithEmailAndPassword(auth, email.trim(), password);
     const user = res.user;
     if (!user.emailVerified) {
       return "Unverified email. Please verify your email and try again.";
@@ -67,15 +67,15 @@ async function loginWithEmailAndPassword(email, password) {
 
 async function registerWithEmailAndPassword(name, email, password, type) {
   try {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const res = await createUserWithEmailAndPassword(auth, email.trim(), password);
     const user = res.user;
     if (user.emailVerified) {
-      await addUser(user.uid, type, name, "local", email);
+      await addUser(user.uid, type, name, "local", email.trim());
       await updateProfile(auth.currentUser, { displayName: name });
     } else {
       await sendEmailVerification(auth.currentUser);
       await updateProfile(auth.currentUser, { displayName: name });
-      await addUser(user.uid, type, name, "local", email);
+      await addUser(user.uid, type, name, "local", email.trim());
     }
     return "Success";
   } catch (err) {
