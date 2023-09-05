@@ -10,7 +10,6 @@ const Navbar = (props) => {
   function logout() {
     try {
       auth.signOut();
-      navigate("/register/login");
     } catch {
       // Error logging out (insufficient permissions)
     }

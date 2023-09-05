@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 async function setDocument(collection, uid, data) {
   await setDoc(doc(db, collection, uid), data);
@@ -74,6 +74,10 @@ export async function updateUser(uid, type, data) {
   } else if (type === "Admin") {
     await updateDoc(doc(db, "admin", uid), data);
   }
+}
+
+export async function deleteUser(uid, type) {
+  await deleteDoc(doc(db, type, uid));
 }
 
 export async function addHours(uid, menteeId, type, hours, description = "", attachment = "") {

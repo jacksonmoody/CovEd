@@ -1,4 +1,5 @@
 import { useState, forwardRef } from "react";
+import { auth } from "../helpers/firebase";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -17,7 +18,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
-import { updateUser } from "../helpers/database";
+import { updateUser, deleteUser } from "../helpers/database";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import CircularProgress from "@mui/material/CircularProgress";
 import OnboardingCard from "./OnboardingCard";
@@ -136,6 +137,35 @@ function Onboarding(props) {
           <OnboardingCard
             title="Welcome to CovEd!"
             subtitle="We can't wait to have you join us. Now, let's finish setting up your account:">
+            <div
+              style={{
+                backgroundColor: "#ffe094",
+                borderRadius: "10px",
+                marginTop: "20px",
+                padding: "20px"
+              }}>
+              <Typography component="h4" sx={{ textAlign: "center" }}>
+                Note: You are currently registering{" "}
+                {props.currentUser.type === "Mentor" ? "to mentor" : "for mentorship"}. If this is
+                incorrect, please{" "}
+                <span
+                  style={{ textDecoration: "underline", cursor: "pointer" }}
+                  onClick={async () => {
+                    try {
+                      if (props.currentUser.type === "Mentor") {
+                        await deleteUser(props.currentUser.uid, "mentors");
+                      } else {
+                        await deleteUser(props.currentUser.uid, "mentees");
+                      }
+                      auth.signOut();
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }}>
+                  restart the registration process.
+                </span>
+              </Typography>
+            </div>
             <Button variant="contained" onClick={() => nextPage()} sx={{ mt: 3, mb: 1 }}>
               Next
             </Button>
